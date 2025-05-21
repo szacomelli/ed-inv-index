@@ -10,11 +10,9 @@ int strcmp(string wordOne, string wordTwo) {
         if (wordOne[currI] == '\0' || wordTwo[currI] == '\0') break;
         else if (wordOne[currI] < wordTwo[currI]) {
             result -= 1;
-            break;
         }
         else if (wordOne[currI] > wordTwo[currI]) {
             result += 1;
-            break;
         }
         else currI += 1;
     }
