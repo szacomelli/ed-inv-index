@@ -1,21 +1,19 @@
 #include "str.h"
 
-int strcmp(string wordOne, string wordTwo) {
-    int result = 0;
-    // int sizeOne = sizeof(wordOne) - 1;
-    // int sizeTwo = sizeof(wordTwo) - 1;
-    int currI = 0;
-    while (result == 0) {
-        if (wordOne[currI] == '\0' || wordTwo[currI] == '\0') break;
-        else if (wordOne[currI] < wordTwo[currI]) {
-            result -= 1;
-        }
-        else if (wordOne[currI] > wordTwo[currI]) {
-            result += 1;
-        }
-        else currI += 1;
+int strcmp(string strOne, string strTwo) {
+    if (!strOne || !strTwo) {
+        printf("Error in strcmp(): received a NULL param");
+        exit(1);
     }
-    return result;
+    int currI = 0;
+    while (strOne[currI] || strTwo[currI]) {
+        if (strOne[currI] == '\0') return -1;
+        else if (strTwo[currI] == '\0') return 1;
+        else if (strOne[currI] < strTwo[currI]) return -1;
+        else if (strOne[currI] > strTwo[currI]) return 1;
+        currI += 1;
+    }
+    return 0;
 }
 
 int countChar(string txt, char wanted) {
@@ -26,23 +24,26 @@ int countChar(string txt, char wanted) {
     return count;
 }
 
-int strSize(string word) {
-    if (!word) {
-        printf("Error in strsize(): 'word' param is NULL");
+int strSize(string str) {
+    if (!str) {
+        printf("Error in strSize(): 'str' param is NULL");
         exit(1);
     }
-    uint len = 0;
-    while(word[len]) len++;
+    int len = 0;
+    while(str[len]) len++;
     return len;
 }
 
-void strImplant(string src, string dst, uint start, uint end) {
+void strImplant(string src, string dst, int start, int end) {
     if (!src) {
-        printf("Error in strImplant(): 'src' pointer is NUL;\n");
+        printf("Error in strImplant(): 'src' pointer is NULL;\n");
+        exit(1);
+    } else if (start > end) {
+        printf("Error in strImplant(): end must be greater than start;\n");
         exit(1);
     }
-    uint len = strSize(dst);
-    uint idx = start;
+    int len = strSize(dst);
+    int idx = start;
     while (idx < end) {
         dst[idx] = src[idx - start];
         idx++;
@@ -53,26 +54,29 @@ void strImplant(string src, string dst, uint start, uint end) {
 
 void strCopy(string src, string dst) {
     if (!src) {
-        printf("Error in strcopy(): 'src' pointer is NULL;\n");
+        printf("Error in strCopy(): 'src' pointer is NULL;\n");
         exit(1);
     }
-    uint len = strSize(src);
-    uint idx = 0;
+    int len = strSize(src);
+    int idx = 0;
     while (idx < len) dst[idx++] = src[idx];
     dst[idx] = '\0';
 }
 
-void strConcat(string str1, string str2, string result, char sep) {
-    if (!str1 | !str2) {
-        printf("Error in strConcat(): 'str' pointer is NULL;\n");
+void strConcat(string strOne, string strTwo, string result, char sep) {
+    if (!strOne) {
+        printf("Error in strConcat(): 'strOne' pointer is NULL;\n");
+        exit(1);
+    } else if (!strTwo) {
+        printf("Error in strConcat(): 'strTwo' pointer is NULL;\n");
         exit(1);
     }
-    uint idxR = 0;
-    uint idx = 0;
-    while(str1[idx]) result[idxR++] = str1[idx++];
+    int idxR = 0;
+    int idx = 0;
+    while(strOne[idx]) result[idxR++] = strOne[idx++];
     if (sep) result[idxR++] = sep;
     idx = 0;
-    while(str2[idx]) result[idxR++] = str2[idx++];
+    while(strTwo[idx]) result[idxR++] = strTwo[idx++];
     result[idxR] = '\0';
 }
 
@@ -80,9 +84,8 @@ string* strSplit(string str, char sep) {
     if (!str) {
         return NULL;
     }
-    uint idx = 0;
-    uint qtd = 1 + countChar(str, sep);
-    idx = 0;
+    int idx = 0;
+    int qtd = 1 + countChar(str, sep);
     string* result = malloc(sizeof(string)*(qtd+1));
     qtd = 1;
     result[0] = str;
@@ -96,4 +99,22 @@ string* strSplit(string str, char sep) {
     }
     result[qtd] = NULL;
     return result;
+}
+
+int isSubstr(string strOne, string strTwo) {
+    if (!strOne | !strTwo) {
+        return 0;
+    }
+    int actO = 0;
+    int actT = 0;
+    while (strTwo[actT]) {
+        if (strTwo[actT] == strOne[0]) {
+            while(strOne[actO] == strTwo[actT + actO]) actO ++;
+            if (strOne[actO] == '\0') return 1;
+            actO = 0;
+        }
+        else if (strTwo[actT] == '\0') return 0;
+        actT += 1;
+    }
+    return 0;
 }
