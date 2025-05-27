@@ -10,7 +10,7 @@ lkdList* createList() {
     list->size = 0;
     list->overallType = "void";
     return list;
-}   
+}
 
 node* createNode(void* value, string type) {
     node* Node = (node*) malloc(sizeof(node));
@@ -32,7 +32,7 @@ void insertNode(lkdList* List, node* Node) {
         Node->index = 0;
         return;
     }
-    
+
     node* iterator = List->head;
     while (iterator->next != NULL) {
         iterator = iterator->next;
@@ -81,7 +81,7 @@ void nodeValue(void* value, node* Node) {
         return;
     }
     else {
-        memcpy(value, Node->value, Node->valueSize)
+        memcpy(value, Node->value, Node->valueSize);
         return;
     }
 }
@@ -138,6 +138,6 @@ void insertValue(lkdList* list, void* value) {
 void lookupValue(lkdList* list, void* value) {
     node* iterator = list->head;
     while (iterator != NULL) {
-        if (strcmp(iterator->type,"string")==0 && )
+        if (strcmp(iterator->type,"string") == 0 && strcmp(*(string*)value, *(string*)iterator->value) )
     }
 }
