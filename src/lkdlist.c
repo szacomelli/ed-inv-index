@@ -44,4 +44,29 @@ void insertNode(lkdList* List, node* Node) {
     Node->index = iterator->index + 1;
 }
 
+void nodeValue(void* value, node* Node) {
+    if (Node == NULL) return NULL;
+    if (strcmp(Node->type, "string") == 0) {
+        str = malloc(sizeof(Node->value));
+        string* strPtr = malloc(sizeof(string));
+        strcopy(str, (string) Node->value, 0, capacity(str));
+        strPtr = &str;
+        value = strPtr;
+        return;
+    }
+    else if (strcmp(Node->type, "int") == 0) {
+        
+    }
+    else if (strcmp(Node->type, "double") == 0) {
 
+    }
+    else if (strcmp(Node->type, "char") == 0) {
+
+    }
+    else if (strcmp(Node->type, "bool") == 0) {
+
+    }
+    else if (strcmp(Node->type, "unsigned int") == 0) {
+
+    }
+}
