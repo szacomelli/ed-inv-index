@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #include "lkdlist.h"
 #include "str.h"
 #include <stdio.h>
@@ -70,3 +71,5 @@ void nodeValue(void* value, node* Node) {
 
     }
 }
+=======
+>>>>>>> 4e59fac5ce7f5e2ef655013e9f64d28224fa0645
