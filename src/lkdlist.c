@@ -3,8 +3,6 @@
 
 lkdList* createList() {
     lkdList* list = (lkdList*) malloc(sizeof(lkdList));
-    // list->head = (node*) malloc(sizeof(node));
-    // list->tail = (node*) malloc(sizeof(node));
     list->head = NULL;
     list->tail = NULL;
     list->size = 0;
@@ -44,44 +42,31 @@ void insertNode(lkdList* List, node* Node) {
 }
 
 void nodeValue(void* value, node* Node) {
-    if (Node == NULL || value != NULL) return;
+    if (Node == NULL) return;
     if (strcmp(Node->type, "string") == 0) {
-        string str = malloc(strSize(*(string*) Node->value));
-        string* strPtr = malloc(sizeof(string));
-        strcopy(str, *(string*) Node->value, 0, capacity(*(string*) Node->value));
-        strPtr = &str;
-        value = strPtr;
+        string str = malloc(strSize(*(string*)Node->value) + 1);
+        strCopy(*(string*)Node->value, str);//, 0, capacity(*(string*) Node->value));
+        *(string*)value = str;
         return;
     }
     else if (strcmp(Node->type, "int") == 0) {
-        int* ptr = malloc(4);
-        *ptr = *(int*) Node->value;
-        value = ptr;
+        *(int*)value = *(int*) Node->value;
         return;
     }
     else if (strcmp(Node->type, "double") == 0) {
-        double* ptr = malloc(8);
-        *ptr = *(double*) Node->value;
-        value = ptr;
+        *(double*)value = *(double*)Node->value;
         return;
     }
     else if (strcmp(Node->type, "char") == 0) {
-        char* ptr = malloc(1);
-        *ptr = *(char*) Node->value;
-        value = ptr;
+        *(char*) value = *(char*) Node->value;
         return;
     }
-    // else if (strcmp(Node->type, "bool") == 0) {
-
-    // }
     else if (strcmp(Node->type, "unsigned int") == 0) {
-        unsigned int* ptr = malloc(4);
-        *ptr = *(unsigned int*) Node->value;
-        value = ptr;
+        *(unsigned int*)value = *(unsigned int*) Node->value;
         return;
     }
     else {
-        memcpy(value, Node->value, Node->valueSize);
+        memCopy(value, Node->value, Node->valueSize);
         return;
     }
 }
@@ -91,17 +76,17 @@ void insertValue(lkdList* list, void* value) {
     node* newNode = malloc(sizeof(node));
     newNode->type = list->overallType;
     newNode->prev = list->tail;
-    list->tail->next = newNode;
-    newNode->index = list->tail->index + 1;
+    if (list->tail) {             //If there's a tail
+        list->tail->next = newNode;
+        newNode->index = list->tail->index + 1;
+    } else list->head = newNode;  //If it doesn't have a tail, it also doesn't have a head
     list->tail = newNode;
     list->size += 1;
-
+    
     if (strcmp(list->overallType, "string") == 0) {
-        string str = malloc(strSize(*(string*) value));
-        string* strPtr = malloc(sizeof(string));
-        strcopy(str, *(string*) value, 0, capacity(*((string*) value)));
-        strPtr = &str;
-        newNode->value = strPtr;
+        string str = malloc(strSize(*(string*)value) + 1);
+        strCopy(*(string*)value, str);
+        *(string*)newNode->value = str;
         newNode->type = "string";
         return;
     }
@@ -125,14 +110,19 @@ void insertValue(lkdList* list, void* value) {
     }
     else if (strcmp(list->overallType, "unsigned int") == 0) {
         newNode->value = malloc(4);
-        *(char*) newNode->value = *(char*)value;
+        *(unsigned int*) newNode->value = *(unsigned int*)value;
         newNode->type = "unsigned int";
         return;
     }
     else {
-        memcpy(newNode->value, value, 8);
+        memCopy(newNode->value, value, 8);
         return;
     }
+}
+
+void memCopy(void* dst, void* src, int numBytes){
+    printf("You were not suposed to be here\n");
+    return;
 }
 
 int lookupValue(lkdList* list, void* value) {
