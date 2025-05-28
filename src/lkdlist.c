@@ -99,7 +99,7 @@ void insertValue(lkdList* list, void* value) {
     if (strcmp(list->overallType, "string") == 0) {
         string str = malloc(strSize(*(string*) value));
         string* strPtr = malloc(sizeof(string));
-        strcopy(str, *(string*) value, 0, capacity(*(string*) value));
+        strcopy(str, *(string*) value, 0, capacity(*((string*) value)));
         strPtr = &str;
         newNode->value = strPtr;
         newNode->type = "string";
@@ -135,9 +135,38 @@ void insertValue(lkdList* list, void* value) {
     }
 }
 
-void lookupValue(lkdList* list, void* value) {
+int lookupValue(lkdList* list, void* value) {
     node* iterator = list->head;
     while (iterator != NULL) {
-        if (strcmp(iterator->type,"string") == 0 && strcmp(*(string*)value, *(string*)iterator->value) )
+        if (strcmp(iterator->type,"string") == 0 && strcmp(*(string*)value, *(string*)iterator->value) == 0) {
+           return iterator->index;
+        }
+        else if (strcmp(iterator->type,"int") == 0 && *(int*) value == *(int*)iterator->value) {
+            return iterator->index;
+        }
+        else if (strcmp(iterator->type,"double") == 0 && *(double*) value == *(double*)iterator->value) {
+            return iterator->index;
+        }
+        else if (strcmp(iterator->type,"char") == 0 && *(char*) value == *(char*)iterator->value) {
+            return iterator->index;
+        }
+        else if (strcmp(iterator->type,"unsigned int") == 0 && *(int*) value == *(int*)iterator->value) {
+            return iterator->index;
+        }
+        iterator = iterator->next;
     }
+    return -1;
 }
+
+node* lookIndex(lkdList* list, int index) {
+    if (index < 0 || list == NULL) return NULL;
+    else if (index > list->tail->index) return NULL;
+    node* iterator = list->head;
+    while (iterator != NULL) {
+        if (iterator->index == index) return iterator;
+        iterator = iterator->next;
+    }
+    return NULL;
+}
+
+// void getIndexValue(lkdList* list, int index, void* value)

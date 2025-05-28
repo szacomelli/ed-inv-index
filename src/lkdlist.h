@@ -26,4 +26,6 @@ void insertNode(lkdList* List, node* Node);
 
 void nodeValue(void* value, node* Node);
 
-void lookupValue(lkdList* list, void* value);
+int lookupValue(lkdList* list, void* value);
+
+node* lookIndex(lkdList* list, int index);
