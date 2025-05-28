@@ -37,3 +37,9 @@ int lookupValue(lkdList* list, void* value);
 node* lookIndex(lkdList* list, int index);
 
 void getIndexValue(lkdList* list, int index, void* value);
+
+void freeNode(node* Node, node** pvNode, node** nxNode);
+
+void freeList(lkdList* list);
+
+void deleteIndex(lkdList* list, int index, void* value);
