@@ -1,12 +1,13 @@
 #include "lkdlist.h"
 
 
-lkdList* createList() {
+lkdList* createList(string type) {
     lkdList* list = (lkdList*) malloc(sizeof(lkdList));
+    list->overallType = type;
     list->head = NULL;
     list->tail = NULL;
     list->size = 0;
-    list->overallType = "void";
+    // list->overallType = "void";
     return list;
 }
 
@@ -82,7 +83,7 @@ void insertValue(lkdList* list, void* value) {
     } else list->head = newNode;  //If it doesn't have a tail, it also doesn't have a head
     list->tail = newNode;
     list->size += 1;
-    
+
     if (strcmp(list->overallType, "string") == 0) {
         string str = malloc(strSize(*(string*)value) + 1);
         strCopy(*(string*)value, str);
@@ -151,6 +152,9 @@ int lookupValue(lkdList* list, void* value) {
 node* lookIndex(lkdList* list, int index) {
     if (index < 0 || list == NULL) return NULL;
     else if (index > list->tail->index) return NULL;
+    if (index == list->tail->index) {
+        return list->tail;
+    }
     node* iterator = list->head;
     while (iterator != NULL) {
         if (iterator->index == index) return iterator;
@@ -174,6 +178,8 @@ void freeNode(node* Node, node** pvNode, node** nxNode) {
     *pvNode = Node->prev;
     Node->next = NULL;
     Node->prev = NULL;
+    Node->index = 0;
+    Node->type = NULL;
     free(Node->value);
     free(Node);
     return;
@@ -188,6 +194,10 @@ void freeList(lkdList* list) {
         freeNode(iterator, &usl, &tmp);
         iterator = tmp;
     }
+    list->overallType = NULL;
+    list->size = 0;
+    list->tail = NULL;
+    list->head = NULL;
     free(list);
     return;
 }
@@ -196,11 +206,47 @@ void deleteIndex(lkdList* list, int index, void* value) {
     if (list == NULL) return;
     else if (index < 0 || index > list->tail->index) return;
     node* slcNode = lookIndex(list, index);
+    node* iterator = slcNode->next;
+    while (iterator != NULL) {
+        iterator->index--;
+        iterator = iterator->next;
+    }
     slcNode->prev->next = slcNode->next;
     slcNode->next->prev = slcNode->prev;
+
     nodeValue(value, slcNode);
     node* tmp1 = NULL;
     node* tmp2 = NULL;
     freeNode(slcNode, &tmp1, &tmp2);
+    list->size--;
+    return;
+}
+
+void printList(lkdList* list) {
+    if (list == NULL) return;
+    node* iterator = list->head;
+    printf("\nLista de tamanho %d (índice: elemento):\n", list->size);
+    while (iterator != NULL) {
+        if (strcmp(list->overallType, "string") == 0) {
+            printf("\tíndice %d: %s\n", iterator->index, *(string*)iterator->value);
+        }
+        else if (strcmp(list->overallType, "int") == 0) {
+            printf("\tíndice %d: %d\n", iterator->index, *(int*)iterator->value);
+        }
+        else if (strcmp(list->overallType, "double") == 0) {
+            printf("\tíndice %d: %lf\n", iterator->index, *(double*)iterator->value);
+        }
+        else if (strcmp(list->overallType, "char") == 0) {
+            printf("\tíndice %d: %c\n", iterator->index, *(char*)iterator->value);
+        }
+        else if (strcmp(list->overallType, "unsigned int") == 0) {
+            printf("\tíndice %d: %d\n", iterator->index, *(unsigned int*)iterator->value);
+        }
+        else {
+            printf("\tíndice %d: %p\n", iterator->index, *(string*)iterator->value);
+        }
+        iterator = iterator->next;
+    }
+    printf("> Tipo: %s\n\n", list->overallType);
     return;
 }

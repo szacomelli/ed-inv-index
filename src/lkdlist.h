@@ -20,7 +20,7 @@ typedef struct linkedList {
     string overallType;
 } lkdList;
 
-lkdList* createList();
+lkdList* createList(string type);
 
 void memCopy(void* dst, void* src, int numBytes);
 
@@ -43,3 +43,5 @@ void freeNode(node* Node, node** pvNode, node** nxNode);
 void freeList(lkdList* list);
 
 void deleteIndex(lkdList* list, int index, void* value);
+
+void printList(lkdList* list);
