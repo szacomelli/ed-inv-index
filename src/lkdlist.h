@@ -29,3 +29,5 @@ void nodeValue(void* value, node* Node);
 int lookupValue(lkdList* list, void* value);
 
 node* lookIndex(lkdList* list, int index);
+
+void getIndexValue(lkdList* list, int index, void* value);

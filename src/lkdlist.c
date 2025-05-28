@@ -169,4 +169,10 @@ node* lookIndex(lkdList* list, int index) {
     return NULL;
 }
 
-// void getIndexValue(lkdList* list, int index, void* value)
+void getIndexValue(lkdList* list, int index, void* value) {
+    if (list == NULL || value == NULL) return;
+    else if (index < 0 || index > list->tail->index) return;
+    node* ndRefer = lookIndex(list, index);
+    nodeValue(value, ndRefer);
+    return;
+}
