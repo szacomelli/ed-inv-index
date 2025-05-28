@@ -176,3 +176,41 @@ void getIndexValue(lkdList* list, int index, void* value) {
     nodeValue(value, ndRefer);
     return;
 }
+
+void freeNode(node* Node, node** pvNode, node** nxNode) {
+    if (Node == NULL) return;
+    else if (pvNode == NULL || nxNode == NULL) return;
+    *nxNode = Node->next;
+    *pvNode = Node->prev;
+    Node->next = NULL;
+    Node->prev = NULL;
+    free(Node->value);
+    free(Node);
+    return;
+}
+
+void freeList(lkdList* list) {
+    if (list == NULL) return;
+    node* iterator = list->head;
+    node* tmp = NULL;
+    node* usl = NULL;
+    while (iterator != NULL) {
+        freeNode(iterator, &usl, &tmp);
+        iterator = tmp;
+    }
+    free(list);
+    return;
+}
+
+void deleteIndex(lkdList* list, int index, void* value) {
+    if (list == NULL) return;
+    else if (index < 0 || index > list->tail->index) return;
+    node* slcNode = lookIndex(list, index);
+    slcNode->prev->next = slcNode->next;
+    slcNode->next->prev = slcNode->prev;
+    nodeValue(value, slcNode);
+    node* tmp1 = NULL;
+    node* tmp2 = NULL;
+    freeNode(slcNode, &tmp1, &tmp2);
+    return;
+}
