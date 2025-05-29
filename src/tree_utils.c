@@ -63,20 +63,10 @@ int getMaxID(tNode* node) {
 
 void svTreeAux(tNode* node, int maxID, FILE* file) {
     if (node == NULL) return;
-    // int color1 = 200*(((float) node->documentIds->size)/maxID) + 55;
-    // (255, 255, 255), (30, 144, 255)
     int color1 = 225*(((float) maxID - node->documentIds->size)/maxID) + 30;
     int color2 = 111*(((float) maxID - node->documentIds->size)/maxID) + 144;
     printf("%x %x\n", color1, color2);
-    // int color3 = 0*(((float) maxID - node->documentIds->size)/maxID) + 255;
 
-    // if (((float) node->documentIds->size)/maxID < 0.5)
-
-
-
-    // fprintf(file, "\t%s [fillcolor = \"#%02x%02x%02x\", fontcolor = \"%s\", color = \"%s\"]\n\t%s",
-    //     node->word, color1,color2,255,(((float) node->documentIds->size)/maxID < 0.5 ? "white" : "black"),
-    //     ((float) node->documentIds->size)/maxID < 0.5 ? "white" : "black",node->word);
     fprintf(file, "\t%s [fillcolor = \"#%02x%02x%02x\", fontcolor = \"%s\", color = \"%s\"]\n\t%s",
         node->word, color1,color2,255,"black",
         "black",node->word);
