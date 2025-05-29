@@ -63,13 +63,23 @@ int getMaxID(tNode* node) {
 
 void svTreeAux(tNode* node, int maxID, FILE* file) {
     if (node == NULL) return;
-    int color1 = 200*(((float) node->documentIds->size)/maxID) + 55;
+    // int color1 = 200*(((float) node->documentIds->size)/maxID) + 55;
+    // (255, 255, 255), (30, 144, 255)
+    int color1 = 225*(((float) maxID - node->documentIds->size)/maxID) + 30;
+    int color2 = 111*(((float) maxID - node->documentIds->size)/maxID) + 144;
+    printf("%x %x\n", color1, color2);
+    // int color3 = 0*(((float) maxID - node->documentIds->size)/maxID) + 255;
 
-    if (((float) node->documentIds->size)/maxID < 0.5)
+    // if (((float) node->documentIds->size)/maxID < 0.5)
 
+
+
+    // fprintf(file, "\t%s [fillcolor = \"#%02x%02x%02x\", fontcolor = \"%s\", color = \"%s\"]\n\t%s",
+    //     node->word, color1,color2,255,(((float) node->documentIds->size)/maxID < 0.5 ? "white" : "black"),
+    //     ((float) node->documentIds->size)/maxID < 0.5 ? "white" : "black",node->word);
     fprintf(file, "\t%s [fillcolor = \"#%02x%02x%02x\", fontcolor = \"%s\", color = \"%s\"]\n\t%s",
-        node->word, color1,0,0,(((float) node->documentIds->size)/maxID < 0.5 ? "white" : "black"),
-        ((float) node->documentIds->size)/maxID < 0.5 ? "white" : "black",node->word);
+        node->word, color1,color2,255,"black",
+        "black",node->word);
     if (node->right && node->left) {
         fprintf(file, "-> {%s %s}\n", node->right->word, node->left->word);
         svTreeAux(node->left, maxID, file);
@@ -88,7 +98,7 @@ void saveTree(bTree* tree) {
     FILE* file = fopen("test.txt", "w");
     if (file == NULL) return;
 
-    fprintf(file, "digraph {\n\tbgcolor=\"bisque\"\n\tnode [style=\"filled\", shape=\"component\"]\n");
+    fprintf(file, "digraph {\n\tbgcolor=\"navajowhite\"\n\tnode [style=\"filled\", shape=\"component\"]\n");
 
     int maxID = getMaxID(tree->root);
     svTreeAux(tree->root, maxID, file);
