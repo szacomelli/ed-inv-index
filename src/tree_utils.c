@@ -13,3 +13,12 @@ tNode* createNode() {
     node->isRed = 0;
     return node;
 }
+
+bTree* createTree() {
+    tNode* root;
+    tNode* NIL;
+    bTree* tree = malloc(sizeof(bTree));
+    tree->root = NULL;
+    tree->NIL = NULL;
+    return tree;
+}

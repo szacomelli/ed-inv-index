@@ -18,6 +18,8 @@ typedef struct BinaryTree {
 
 tNode* createNode();
 
+bTree* createTree();
+
 // auxiliares
 
 struct InsertResult {
