@@ -41,6 +41,35 @@ int prtIndexAux(tNode* tnode, int idx) {
 
 }
 
+void pTreeAux(tNode* node, int* idxs, int col, int plus, int height) {
+    if (!node) return;
+    int tmp = 0;
+    if (plus) idxs[col] = 1;
+    for (tmp = 0; tmp < col; tmp++)
+        printf("%c ", *(idxs + tmp)? 179 : ' ');
+    if (node->left && node->right) {
+        printf("%c%c%c%c %s [%d]\n", plus? 195 : 192, 196, 194, 196, node->word, node->documentIds->size);
+        pTreeAux(node->left, idxs, col+1, 1, height);
+        pTreeAux(node->right, idxs, col+1, 0, height);
+    } else if (node->left || node->right) {
+        printf("%c%c%c%c %s [%d]\n", plus? 195 : 192, 196, 194, 196, node->word, node->documentIds->size);
+        pTreeAux((node->left)? node->left : node->right, idxs, col+1, 0, height);
+    } else {
+        printf("%c%c%c%c %s [%d]\n", plus? 195 : 192, 196, 196, 196, node->word, node->documentIds->size);
+    }
+    if (idxs[height]) idxs[height] = 0;
+    idxs[col] = 0;
+    return;
+}
+
+void printTree(bTree* tree) {
+    int *idxs = calloc(tree->root->height, 4);
+    for(int tmp = 0; tmp < tree->root->height; tmp++) *(idxs + tmp) = 0;
+    pTreeAux(tree->root, idxs, 0, 0, tree->root->height);
+    free(idxs);
+    return;
+}
+
 void printIndex(bTree* tree) {
     if (tree == NULL) return;
     tNode* iterator = tree->root;
@@ -65,7 +94,7 @@ void svTreeAux(tNode* node, int maxID, FILE* file) {
     if (node == NULL) return;
     int color1 = 200*(((float) node->documentIds->size)/maxID) + 55;
 
-    if (((float) node->documentIds->size)/maxID < 0.5)
+    // if (((float) node->documentIds->size)/maxID < 0.5)
 
     fprintf(file, "\t%s [fillcolor = \"#%02x%02x%02x\", fontcolor = \"%s\", color = \"%s\"]\n\t%s",
         node->word, color1,0,0,(((float) node->documentIds->size)/maxID < 0.5 ? "white" : "black"),
