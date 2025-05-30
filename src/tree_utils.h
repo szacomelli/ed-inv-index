@@ -16,7 +16,7 @@ typedef struct BinaryTree {
     tNode* NIL;  // usado na RBT (Opcional)
 } bTree;
 
-tNode* createNode();
+tNode* createtNode();
 
 bTree* createTree();
 
@@ -36,8 +36,8 @@ struct SearchResult {
     // <Possíveis outras variáveis>
 };
 
-void printIndex(BinaryTree* tree);
+void printIndex(bTree* tree);
 
-void saveTree(BinaryTree* tree);
+void saveTree(bTree* tree);
 
-void printTree(BinaryTree* tree);
+void printTree(bTree* tree);
