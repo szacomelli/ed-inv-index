@@ -13,11 +13,12 @@ string readSingle(string path, int numDoc) {
     string name = malloc(strSize(path) + 10);
     snprintf(name, 19, "%s%d.txt\0", path, numDoc);
     FILE* doc = fopen(name, "r");
-    free(name);
+
     if (!doc) {
-        printf("Error in \"readSingle()\": error opening the document %d;\n", numDoc);
+        printf("Error in \"readSingle()\": error opening \"%s\";\nVerify path;\n", name);
         exit(1);
     }
+    free(name);
     int doclen = docSize(doc);
     string txt = malloc(doclen);
     fgets(txt, doclen, doc);
@@ -36,6 +37,13 @@ string* readTxts(string path, const int start, const int end) {
 string** readStrs(string path, const int start, const int end) {
     string** allStrs = malloc(sizeof(string*)*(end-start+2));
     string txt = NULL;
+    int size = strSize(path);
+    if (path[size] != '/') {
+        string oldP = (string) malloc(size + 1);
+        strCopy(path, oldP);
+        path = (string) malloc(size + 2);
+        strConcat(oldP, "/", path, '\0');
+    }
     for (int idx = start; idx <= end; idx++) {
         txt = readSingle(path, idx);
         *(allStrs + idx) = strSplit(txt, ' ');

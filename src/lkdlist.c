@@ -77,10 +77,16 @@ void insertValue(lkdList* list, void* value) {
     node* newNode = malloc(sizeof(node));
     newNode->type = list->overallType;
     newNode->prev = list->tail;
-    if (list->tail) {             //If there's a tail
+    newNode->next = NULL;
+    if (list->tail) {
         list->tail->next = newNode;
+        // newNode->prev = list->tail;
         newNode->index = list->tail->index + 1;
-    } else list->head = newNode;  //If it doesn't have a tail, it also doesn't have a head
+    }
+    else {
+        list->head = newNode;
+        newNode->index = 0;
+    }
     list->tail = newNode;
     list->size += 1;
 
@@ -173,9 +179,10 @@ void getIndexValue(lkdList* list, int index, void* value) {
 
 void freeNode(node* Node, node** pvNode, node** nxNode) {
     if (Node == NULL) return;
-    else if (pvNode == NULL || nxNode == NULL) return;
-    *nxNode = Node->next;
-    *pvNode = Node->prev;
+    // else if (pvNode == NULL || nxNode == NULL) return;
+    if (Node->next) *nxNode = Node->next;
+    if (Node->prev) *pvNode = Node->prev;
+
     Node->next = NULL;
     Node->prev = NULL;
     Node->index = 0;
@@ -190,8 +197,10 @@ void freeList(lkdList* list) {
     node* iterator = list->head;
     node* tmp = NULL;
     node* usl = NULL;
+    // printList(list);
     while (iterator != NULL) {
         freeNode(iterator, &usl, &tmp);
+
         iterator = tmp;
     }
     list->overallType = NULL;
