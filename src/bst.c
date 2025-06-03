@@ -10,7 +10,7 @@ static tNode *createNodeWithWord(string word, int docId)
     }
 
     int len = strSize(word);
-    newNode->word = (char *)malloc((len + 1) * sizeof(char));
+    newNode->word = (string)malloc((len + 1) * sizeof(char));
     if (newNode->word == NULL)
     {
         fprintf(stderr, "Error: failed to allocate memory for word.\n");
@@ -47,6 +47,7 @@ static tNode *bstInsertRec(tNode *root, tNode *newNode, int *numCmp, int *duplic
         {
             root->left = leftChild;
             leftChild->parent = root;
+            leftChild->height = root->height + 1;
         }
     }
     else
@@ -57,6 +58,7 @@ static tNode *bstInsertRec(tNode *root, tNode *newNode, int *numCmp, int *duplic
         {
             root->right = rightChild;
             rightChild->parent = root;
+            rightChild->height = root->height + 1;
         }
     }
 
@@ -86,67 +88,67 @@ static tNode *bstSearchRec(tNode *root, string word, int *numCmp)
     }
 }
 
-static void printTreeRec(tNode *node, char *prefix, int isLast)
-{
-    if (node == NULL)
-        return;
+// static void printTreeRec(tNode *node, char *prefix, int isLast)
+// {
+//     if (node == NULL)
+//         return;
 
-    printf("%s", prefix);
+//     printf("%s", prefix);
 
-    if (isLast)
-    {
-        // printf("\xE2\x94\x94\xE2\x94\x80\xE2\x94\x80 ");  // └──
-        // printf("└── ");
-        printf("|___ ");
-    }
-    else
-    {
-        // printf("\xE2\x94\x9C\xE2\x94\x80\xE2\x94\x80 ");  // ├──
-        // printf("├── ");
-        printf("|--- ");
-    }
+//     if (isLast)
+//     {
+//         // printf("\xE2\x94\x94\xE2\x94\x80\xE2\x94\x80 ");  // └──
+//         // printf("└── ");
+//         printf("|___ ");
+//     }
+//     else
+//     {
+//         // printf("\xE2\x94\x9C\xE2\x94\x80\xE2\x94\x80 ");  // ├──
+//         // printf("├── ");
+//         printf("|--- ");
+//     }
 
-    printf("%s\n", node->word);
+//     printf("%s\n", node->word);
 
-    size_t lenPrefix = strSize(prefix);
-    char *newPrefix = (char *)malloc(lenPrefix + 5);
-    if (newPrefix == NULL)
-    {
-        fprintf(stderr, "Error allocating memory for new prefix.\n");
-        exit(EXIT_FAILURE);
-    }
+//     size_t lenPrefix = strSize(prefix);
+//     char *newPrefix = (char *)malloc(lenPrefix + 5);
+//     if (newPrefix == NULL)
+//     {
+//         fprintf(stderr, "Error allocating memory for new prefix.\n");
+//         exit(EXIT_FAILURE);
+//     }
 
-    if (isLast)
-    {
-        sprintf(newPrefix, "%s    ", prefix);
-    }
-    else
-    {
-        // sprintf(newPrefix, "%s\xE2\x94\x82   ", prefix);  // │
-        // sprintf(newPrefix, "%s│   ", prefix);
-        sprintf(newPrefix, "%s|   ", prefix);
-    }
+//     if (isLast)
+//     {
+//         sprintf(newPrefix, "%s    ", prefix);
+//     }
+//     else
+//     {
+//         // sprintf(newPrefix, "%s\xE2\x94\x82   ", prefix);  // │
+//         // sprintf(newPrefix, "%s│   ", prefix);
+//         sprintf(newPrefix, "%s|   ", prefix);
+//     }
 
-    int numChildren = 0;
-    if (node->left)
-        numChildren++;
-    if (node->right)
-        numChildren++;
+//     int numChildren = 0;
+//     if (node->left)
+//         numChildren++;
+//     if (node->right)
+//         numChildren++;
 
-    int processed = 0;
-    if (node->left)
-    {
-        processed++;
-        printTreeRec(node->left, newPrefix, (processed == numChildren));
-    }
-    if (node->right)
-    {
-        processed++;
-        printTreeRec(node->right, newPrefix, (processed == numChildren));
-    }
+//     int processed = 0;
+//     if (node->left)
+//     {
+//         processed++;
+//         printTreeRec(node->left, newPrefix, (processed == numChildren));
+//     }
+//     if (node->right)
+//     {
+//         processed++;
+//         printTreeRec(node->right, newPrefix, (processed == numChildren));
+//     }
 
-    free(newPrefix);
-}
+//     free(newPrefix);
+// }
 
 static void bstFreeRec(tNode *root)
 {
@@ -181,6 +183,7 @@ struct InsertResult insert(bTree *tree, string word, int docId)
     {
         tNode *newNode = createNodeWithWord(word, docId);
         tree->root = newNode;
+        tree->root->height = 1;
         newNode->parent = NULL;
         result.numComparisons = 1;
         clock_t end = clock();
@@ -204,9 +207,12 @@ struct InsertResult insert(bTree *tree, string word, int docId)
         int numCmp = 0;
         tNode *existing = bstSearchRec(updatedRoot, word, &numCmp);
         if (existing)
+        printf("%d",1);
         {
-            if (!lookupValue(existing->documentIds, &docId))
+
+            if (lookupValue(existing->documentIds, &docId) == -1)
             {
+                 printf("%d",1);
                 insertValue(existing->documentIds, &docId);
             }
         }
@@ -270,35 +276,35 @@ struct SearchResult search(bTree *tree, string word)
     return result;
 }
 
-void printTreeT(bTree *tree)
-{
-    if (tree == NULL || tree->root == NULL)
-        // If the tree is NULL or empty, we do not print anything
-        return;
+// void printTree(bTree *tree)
+// {
+//     if (tree == NULL || tree->root == NULL)
+//         // If the tree is NULL or empty, we do not print anything
+//         return;
 
-    // First, we print the root node
-    printf("%s\n", tree->root->word);
+//     // First, we print the root node
+//     printf("%s\n", tree->root->word);
 
-    // Second, we prepare the prefix for the children
-    int numChildren = 0;
-    if (tree->root->left)
-        numChildren++;
-    if (tree->root->right)
-        numChildren++;
+//     // Second, we prepare the prefix for the children
+//     int numChildren = 0;
+//     if (tree->root->left)
+//         numChildren++;
+//     if (tree->root->right)
+//         numChildren++;
 
-    // Third, we print the children recursively
-    int processed = 0;
-    if (tree->root->left)
-    {
-        processed++;
-        printTreeRec(tree->root->left, "", (processed == numChildren));
-    }
-    if (tree->root->right)
-    {
-        processed++;
-        printTreeRec(tree->root->right, "", (processed == numChildren));
-    }
-}
+//     // Third, we print the children recursively
+//     int processed = 0;
+//     if (tree->root->left)
+//     {
+//         processed++;
+//         printTreeRec(tree->root->left, "", (processed == numChildren));
+//     }
+//     if (tree->root->right)
+//     {
+//         processed++;
+//         printTreeRec(tree->root->right, "", (processed == numChildren));
+//     }
+// }
 
 void destroy(bTree *tree)
 {
