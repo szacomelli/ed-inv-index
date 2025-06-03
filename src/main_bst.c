@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "str.h"          // For strcmp, strCopy, strSize
-#include "tree_utils.h"   // For printTree, createtNode, createTree, etc.
+// #include "str.h"          // For strcmp, strCopy, strSize
+// #include "tree_utils.h"   // For printTree, createtNode, createTree, etc.
 #include "bst.h"          // For insert, search, destroy
-#include "lkdlist.h"      // For traversing the list of IDs in case of search
+// #include "lkdlist.h"      // For traversing the list of IDs in case of search
 
 #define MAX_WORD_LEN 128
 

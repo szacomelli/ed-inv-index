@@ -16,6 +16,7 @@ static tNode *createNodeWithWord(string word, int docId)
         fprintf(stderr, "Error: failed to allocate memory for word.\n");
         exit(EXIT_FAILURE);
     }
+    printf("word: %s\n", word);
     strCopy(word, newNode->word);
 
     insertValue(newNode->documentIds, &docId);
@@ -27,7 +28,6 @@ static tNode *bstInsertRec(tNode *root, tNode *newNode, int *numCmp, int *duplic
 {
     if (root == NULL)
     {
-        // if tree is empty, newNode becomes root
         return newNode;
     }
 
@@ -176,7 +176,6 @@ struct InsertResult insert(bTree *tree, string word, int docId)
     }
 
     clock_t start = clock();
-
     // First case: tree is empty
     if (tree->root == NULL)
     {
@@ -202,7 +201,8 @@ struct InsertResult insert(bTree *tree, string word, int docId)
         free(newNode);
 
         // If the word already exists, we just add the document ID to the existing node
-        tNode *existing = bstSearchRec(updatedRoot, word, &(int){0});
+        int numCmp = 0;
+        tNode *existing = bstSearchRec(updatedRoot, word, &numCmp);
         if (existing)
         {
             if (!lookupValue(existing->documentIds, &docId))
@@ -221,6 +221,20 @@ struct InsertResult insert(bTree *tree, string word, int docId)
     result.executionTime = ((double)(end - start)) / CLOCKS_PER_SEC;
     return result;
 }
+
+bTree *create()
+{
+    bTree *tree = malloc(sizeof(bTree));
+    if (tree == NULL)
+    {
+        fprintf(stderr, "Error: Failed to allocate memory for bTree.\n");
+        exit(EXIT_FAILURE);
+    }
+    tree->root = NULL;
+    tree->NIL = NULL;
+    return tree;
+}
+
 
 struct SearchResult search(bTree *tree, string word)
 {
@@ -256,7 +270,7 @@ struct SearchResult search(bTree *tree, string word)
     return result;
 }
 
-void printTree(bTree *tree)
+void printTreeT(bTree *tree)
 {
     if (tree == NULL || tree->root == NULL)
         // If the tree is NULL or empty, we do not print anything

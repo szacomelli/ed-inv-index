@@ -1,15 +1,16 @@
-#include <stdio.h>
-#include <stdlib.h>
+// #include <stdio.h>
+// #include <stdlib.h>
 #include <time.h>
-#include "tree_utils.h"  // typedefs tNode, bTree, InsertResult, SearchResult, createtNode(), createTree()
-#include "lkdlist.h"     // lkdList, createList(), insertValue(), lookupValue(), freeList(), printList()
-#include "str.h"         // strcmp (implementação própria), strCopy(), strSize()
+#include "tree_utils.h"
+// #include "lkdlist.h"  
+// #include "str.h"     
 
+bTree* create();
 
 struct InsertResult insert(bTree* tree, string word, int docId);
 
 struct SearchResult search(bTree* tree, string word);
 
-void printTree(bTree* tree);
+void printTreeT(bTree* tree);
 
 void destroy(bTree* tree);
