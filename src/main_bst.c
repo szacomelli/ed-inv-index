@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
     for (int i=0; i < strSize(argv[1]); i++)
     if (argv[1][i] < 48 || argv[1][i] > 57) {printf("WRONG USAGE AGAIN\n"); return 1;}
 
-    int docNumber = atoi(argv[1]) > -1 ? (atoi(argv[1]) <= 10000 ? atoi(argv[1]) : 10000) : 0
+    int docNumber = atoi(argv[1]) > -1 ? (atoi(argv[1]) <= 10000 ? atoi(argv[1]) : 10000) : 0;
 
 
 
