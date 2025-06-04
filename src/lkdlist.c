@@ -208,6 +208,7 @@ void freeList(lkdList* list) {
     list->tail = NULL;
     list->head = NULL;
     free(list);
+    list = NULL;
     return;
 }
 

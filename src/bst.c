@@ -152,10 +152,10 @@ struct InsertResult insert(BinaryTree *tree, string word, int docId)
     // Second case: tree is not empty
     Node* lasNode = NULL;
     Node* currNode = NULL;
-    int comparisons = searchWord(tree->root, word, &currNode, &lasNode);
+    result.numComparisons = searchWord(tree->root, word, &currNode, &lasNode);
 
 
-    if (currNode) // If currNode isn't NULL (i.e. if it was changed)
+    if (currNode) // If currNode isn't NULL (i.e. if word was founded and the pointer changed)
     {
         insertValue(currNode->documentIds, &docId);
     }
@@ -200,18 +200,16 @@ struct SearchResult search(BinaryTree *tree, string word)
     clock_t start = clock();
     Node* lasNode = NULL;
     Node* currNode = NULL;
-    int comparisons = searchWord(tree->root, word, &currNode, &lasNode);
+    result.numComparisons = searchWord(tree->root, word, &currNode, &lasNode);
     if (currNode)
     {
         result.found = 1;
         result.documentIds = currNode->documentIds;
-        result.numComparisons = comparisons;
     }
     else
     {
         result.found = 0;
         result.documentIds = NULL;
-        result.numComparisons = comparisons;
     }
 
     clock_t end = clock();
