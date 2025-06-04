@@ -19,7 +19,7 @@ BinaryTree* buildTree(string** docInfo, string mode) {
         int docLen = 0;
         while (docInfo[i][docLen]) docLen++; // gets docInfo[i] length
         for (int j = 0; j < docLen; j++) {
-            struct InsertResult result = insert(tree, *(*(docInfo + i) + j), i);
+            struct InsertResult result = insertBST(tree, *(*(docInfo + i) + j), i);
             // more stat gathering
             totalInsTime += result.executionTime;
             maxHeight = maxHeight < result.numComparisons ? result.numComparisons : maxHeight;
@@ -80,7 +80,7 @@ int main(int argc, char *argv[]) {
         printf("%s\n", word);
         printf("\n");
         if (strcmp(word, "#stop") != 0) {
-            struct SearchResult result = search(tree, word);
+            struct SearchResult result = searchBST(tree, word);
             if (result.found) {
                 printf("Word found at height %d\n", result.numComparisons);
 
@@ -102,7 +102,7 @@ int main(int argc, char *argv[]) {
     }
 
     // freeing everything
-    destroy(tree);
+    destroyBST(tree);
 
     freeDocs(docInfo);
 }

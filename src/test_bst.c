@@ -11,7 +11,7 @@
  *   — caso encontrada, percorre a lista de documentIds e imprime todos.
  */
 static void printSearchResult(BinaryTree *tree, const char *word) {
-    struct SearchResult sr = search(tree, (string)word);
+    struct SearchResult sr = searchBST(tree, (string)word);
 
     if (sr.found) {
         printf(
@@ -39,28 +39,28 @@ static void printSearchResult(BinaryTree *tree, const char *word) {
 }
 
 int main() {
-    BinaryTree *tree = create();
+    BinaryTree *tree = createBST();
     struct InsertResult ir;
 
     // 1) Inserções de palavras distintas em diferentes documentos
-    ir = insert(tree, "maca", 1);
+    ir = insertBST(tree, "maca", 1);
     printf("Inseriu 'maca' no doc 1      (comparacoes = %d, tempo = %f s)\n",
            ir.numComparisons, ir.executionTime);
 
-    ir = insert(tree, "banana", 2);
+    ir = insertBST(tree, "banana", 2);
     printf("Inseriu 'banana' no doc 2    (comparacoes = %d, tempo = %f s)\n",
            ir.numComparisons, ir.executionTime);
 
-    ir = insert(tree, "laranja", 3);
+    ir = insertBST(tree, "laranja", 3);
     printf("Inseriu 'laranja' no doc 3   (comparacoes = %d, tempo = %f s)\n",
            ir.numComparisons, ir.executionTime);
 
-    ir = insert(tree, "abacaxi", 4);
+    ir = insertBST(tree, "abacaxi", 4);
     printf("Inseriu 'abacaxi' no doc 4   (comparacoes = %d, tempo = %f s)\n",
            ir.numComparisons, ir.executionTime);
 
     // 2) Inserir palavra duplicada ("banana") no documento 5
-    ir = insert(tree, "banana", 5);
+    ir = insertBST(tree, "banana", 5);
     printf("Inseriu 'banana' no doc 5 (duplicado)  (comparacoes = %d, tempo = %f s)\n\n",
            ir.numComparisons, ir.executionTime);
 
@@ -75,7 +75,7 @@ int main() {
     printSearchResult(NULL, "qualquer coisa");
 
     // 4) Destruição da árvore e liberação de memória
-    destroy(tree);
+    destroyBST(tree);
     free(tree);
     return 0;
 }

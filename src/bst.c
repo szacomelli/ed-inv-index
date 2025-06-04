@@ -119,7 +119,7 @@ int searchWord(Node* node, string word, Node** currNode, Node** lasNode) {
     }
 }
 
-struct InsertResult insert(BinaryTree *tree, string word, int docId)
+struct InsertResult insertBST(BinaryTree *tree, string word, int docId)
 {
     struct InsertResult result;
     result.numComparisons = 0;
@@ -185,7 +185,7 @@ struct InsertResult insert(BinaryTree *tree, string word, int docId)
     return result;
 }
 
-struct SearchResult search(BinaryTree *tree, string word)
+struct SearchResult searchBST(BinaryTree *tree, string word)
 {
     struct SearchResult result;
     result.found = 0;
@@ -220,7 +220,7 @@ struct SearchResult search(BinaryTree *tree, string word)
     return result;
 }
 
-void destroy(BinaryTree *tree)
+void destroyBST(BinaryTree *tree)
 {
     if (tree == NULL)
         return;
