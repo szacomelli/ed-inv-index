@@ -68,6 +68,11 @@ int main(int argc, char *argv[]) {
     bTree* tree = buildTree(docInfo, argv[1]);
 
 
+    char prConf = '0';
+    printf("Print tree? (y/n) ");
+    scanf(" %c", &prConf);
+    if (prConf == 'y') printTree(tree);
+
     char word[100];
     while(strcmp(word, "#stop") != 0) {
         printf("Write the word to be searched (#stop to stop execution): ");
@@ -96,7 +101,7 @@ int main(int argc, char *argv[]) {
 
     }
 
-    // printTree(tree);
+    // freeing everything
     destroy(tree);
 
     freeDocs(docInfo);

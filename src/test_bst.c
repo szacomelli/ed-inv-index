@@ -72,6 +72,7 @@ int main() {
     printSearchResult(tree, "laranja");
     printSearchResult(tree, "abacaxi");
     printSearchResult(tree, "uva");  // palavra que não existe
+    printSearchResult(NULL, "qualquer coisa");
 
     // 4) Destruição da árvore e liberação de memória
     destroy(tree);
