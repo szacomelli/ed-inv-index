@@ -35,37 +35,37 @@ int test_insertion(int* total) {
     int tests = 0;
     BinaryTree* tree = createTree();
     struct InsertResult results;
-    results = insert(NULL, "null", 0);
+    results = insertBST(NULL, "null", 0);
     printf("-Teste %2d: ", tests++);
     if (results.numComparisons) {
         errors++;
         printf("Error in \"insert()\": realizing comparison in NULL;\n");
     } else printf("Ok;\n");
-    results = insert(tree, "root", 0);
+    results = insertBST(tree, "root", 0);
     printf("-Teste %2d: ", tests++);
     if (results.numComparisons > 0) {
         errors++;
         printf("Error in \"insert()\": realizing more comparisons than needed;\n");
     } else printf("Ok;\n");
-    results = insert(tree, "left", 0);
+    results = insertBST(tree, "left", 0);
     printf("-Teste %2d: ", tests++);
     if (results.numComparisons > 1){
         errors++;
         printf("Error in \"insert()\": realizing more comparisons than needed;\n");    
     } else printf("Ok;\n");
-    results = insert(tree, "right", 0);
+    results = insertBST(tree, "right", 0);
     printf("-Teste %2d: ", tests++);
     if (results.numComparisons > 2){
         errors++;
         printf("Error in \"insert()\": realizing more comparisons than needed;\n");    
     } else printf("Ok;\n");
-    results = insert(tree, "tree", 0);
+    results = insertBST(tree, "tree", 0);
     printf("-Teste %2d: ", tests++);
     if (results.numComparisons > 1){
         errors++;
         printf("Error in \"insert()\": realizing more comparisons than needed;\n");    
     } else printf("Ok;\n");
-    results = insert(tree, "right", 1);
+    results = insertBST(tree, "right", 1);
     printf("-Teste %2d: ", tests++);
     if (results.numComparisons > 3){
         errors++;
@@ -119,7 +119,7 @@ int test_insertion(int* total) {
                 printf("Error in \"insert()\": IDs on root->left->right is wrong;\n");
                 errors++;
             } else printf("Ok;\n");
-            results = insert(tree, "right", 0);  // Inserting repeated docId
+            results = insertBST(tree, "right", 0);  // Inserting repeated docId
             printf("-Teste %2d: ", tests++);
             if (root->left->right->documentIds->size != 3) {
                 printf("Error in \"insert()\": size of documentIds different than expected;\n");
@@ -155,7 +155,7 @@ int test_search(int* total) {
     int errors = 0;
     int tests = 0;
     struct SearchResult results;
-    results = search(NULL, NULL);
+    results = searchBST(NULL, NULL);
     printf("-Teste %2d: ", tests++);
     if (results.found) {
         printf("Error in \"search()\": found result in NULL;\n");
@@ -167,7 +167,7 @@ int test_search(int* total) {
         errors++;
     } else printf("Ok;\n");
     BinaryTree* tree = createTree();
-    results = search(tree, NULL);
+    results = searchBST(tree, NULL);
     printf("-Teste %2d: ", tests++);
     if (results.found) {
         printf("Error in \"search()\": found result in tree with NULL root;\n");
@@ -179,14 +179,14 @@ int test_search(int* total) {
         errors++;
     } else printf("Ok;\n");
 
-    insert(tree, "root", 0);
-    insert(tree, "left", 0);
-    insert(tree, "right", 0);
-    insert(tree, "tree", 0);
-    insert(tree, "tree", 57);
-    insert(tree, "tree", 0);
+    insertBST(tree, "root", 0);
+    insertBST(tree, "left", 0);
+    insertBST(tree, "right", 0);
+    insertBST(tree, "tree", 0);
+    insertBST(tree, "tree", 57);
+    insertBST(tree, "tree", 0);
     Node* root = tree->root;
-    results = search(tree, "root");
+    results = searchBST(tree, "root");
     printf("-Teste %2d: ", tests++);
     if (!results.found) {
         printf("Error in \"search()\": didn't found a word in the tree;\n");
@@ -204,7 +204,7 @@ int test_search(int* total) {
         printf("Error in \"search()\": inserted wrong document number;\n");
         errors++;
     } else printf("Ok;\n");
-    results = search(tree, "tree");
+    results = searchBST(tree, "tree");
     printf("-Teste %2d: ", tests++);
     if (!results.found) {
         printf("Error in \"search()\": didn't found a word in the tree;\n");
@@ -215,7 +215,7 @@ int test_search(int* total) {
         printf("Error in \"search()\": realized more comparisons than needed;\n");
         errors++;
     } else printf("Ok;\n");
-    results = search(tree, "round");
+    results = searchBST(tree, "round");
     printf("-Teste %2d: ", tests++);
     if (results.found) {
         printf("Error in \"search()\": founded a word that isn't in the tree;\n");
@@ -237,14 +237,14 @@ int test_destroy(int* total) {
     int errors = 0;
     int tests = 0;
     BinaryTree* tree = createTree();
-    insert(tree, "root", 0);
-    insert(tree, "left", 0);
-    insert(tree, "right", 0);
-    insert(tree, "tree", 0);
+    insertBST(tree, "root", 0);
+    insertBST(tree, "left", 0);
+    insertBST(tree, "right", 0);
+    insertBST(tree, "tree", 0);
     Node* treeN = tree->root->right;
     Node* leftN = tree->root->left;
     Node* rightN = tree->root->left->right;
-    destroy(tree);
+    destroyBST(tree);
     printf("-Teste %2d: ", tests++);
     if (!tree) {
         printf("Error in \"destroy()\": tree was not released;\n");
