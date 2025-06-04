@@ -51,25 +51,25 @@ int test_insertion(int* total) {
     printf("-Teste %2d: ", tests++);
     if (results.numComparisons > 1){
         errors++;
-        printf("Error in \"insert()\": realizing more comparisons than needed;\n");    
+        printf("Error in \"insert()\": realizing more comparisons than needed;\n");
     } else printf("Ok;\n");
     results = insertBST(tree, "right", 0);
     printf("-Teste %2d: ", tests++);
     if (results.numComparisons > 2){
         errors++;
-        printf("Error in \"insert()\": realizing more comparisons than needed;\n");    
+        printf("Error in \"insert()\": realizing more comparisons than needed;\n");
     } else printf("Ok;\n");
     results = insertBST(tree, "tree", 0);
     printf("-Teste %2d: ", tests++);
     if (results.numComparisons > 1){
         errors++;
-        printf("Error in \"insert()\": realizing more comparisons than needed;\n");    
+        printf("Error in \"insert()\": realizing more comparisons than needed;\n");
     } else printf("Ok;\n");
     results = insertBST(tree, "right", 1);
     printf("-Teste %2d: ", tests++);
     if (results.numComparisons > 3){
         errors++;
-        printf("Error in \"insert()\": realizing more comparisons than needed;\n");    
+        printf("Error in \"insert()\": realizing more comparisons than needed;\n");
     } else printf("Ok;\n");
     Node* root = tree->root;
     printf("-Teste %2d: ", tests++);
@@ -86,7 +86,7 @@ int test_insertion(int* total) {
         printf("-Teste %2d: ", tests++);
         if (strcmp(root->word, "root")) {
             printf("Error in \"insert()\": wrong word inserted on root;\n");
-            errors++;    
+            errors++;
         } else printf("Ok;\n");
     }
     printf("-Teste %2d: ", tests++);
@@ -273,8 +273,9 @@ int test_destroy(int* total) {
 
 int main(void) {
     printf("\n -> Run the tests? (y/n)\n -->");
-    int errors = fgetchar();
-    int* tests;
+    int errors = 0;
+    scanf("%c", &errors);
+    int* tests = malloc(4);
     *tests = 0;
     if (errors == 121) {
         errors = 0;

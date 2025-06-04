@@ -82,7 +82,7 @@ int main(int argc, char *argv[]) {
         if (strcmp(word, "#stop") != 0) {
             struct SearchResult result = searchBST(tree, word);
             if (result.found) {
-                printf("Word found at height %d\n", result.numComparisons);
+                printf("Word found at depth %d\n", result.numComparisons);
 
                 if (strcmp(argv[1], "stats") == 0) {
                     printf("Execution time: %lf\nNumber of comparison: %d\n", result.executionTime, result.numComparisons);

@@ -4,14 +4,13 @@
 #include <locale.h>
 
 // To format printTree() according to operational system
-#ifdef _WIN32  
+#ifdef _WIN32
     #define C1 179
     #define C2 195
     #define C3 192
     #define C4 196
     #define C5 194
 #else
-    setlocale(LC_CTYPE, "");
     #define C1 9474
     #define C2 9500
     #define C3 9492
@@ -90,6 +89,9 @@ int calculateHeight(Node* node) {
 }
 
 void printTree(BinaryTree* tree) {
+    #ifndef _WIN32
+        setlocale(LC_CTYPE, "");
+    #endif
     // setlocale(LC_CTYPE, "");
     int *idxs = malloc(calculateHeight(tree->root)*4);
     for(int tmp = 0; tmp < tree->root->height; tmp++) *(idxs + tmp) = 0;
