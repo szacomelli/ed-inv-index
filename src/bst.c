@@ -1,13 +1,11 @@
 #include "bst.h"
 
-#define create createTree();
-
-static tNode *createNodeWithWord(string word, int docId)
+static Node *createNodeWithWord(string word, int docId)
 {
-    tNode *newNode = createtNode();
+    Node *newNode = createNode();
     if (newNode == NULL)
     {
-        fprintf(stderr, "Error: Failed to allocate memory for tNode.\n");
+        fprintf(stderr, "Error: Failed to allocate memory for Node.\n");
         exit(EXIT_FAILURE);
     }
 
@@ -24,7 +22,7 @@ static tNode *createNodeWithWord(string word, int docId)
     return newNode;
 }
 
-static tNode *bstInsertRec(tNode *root, tNode *newNode, int *numCmp, int *duplicateFound)
+static Node *bstInsertRec(Node *root, Node *newNode, int *numCmp, int *duplicateFound)
 {
     if (root == NULL)
     {
@@ -43,7 +41,7 @@ static tNode *bstInsertRec(tNode *root, tNode *newNode, int *numCmp, int *duplic
     else if (cmp < 0)
     {
         // if newNode->word < root->word -> follow left subtree
-        tNode *leftChild = bstInsertRec(root->left, newNode, numCmp, duplicateFound);
+        Node *leftChild = bstInsertRec(root->left, newNode, numCmp, duplicateFound);
         if (!(*duplicateFound))
         {
             root->left = leftChild;
@@ -54,7 +52,7 @@ static tNode *bstInsertRec(tNode *root, tNode *newNode, int *numCmp, int *duplic
     else
     {
         // if newNode->word > root->word -> follow right subtree
-        tNode *rightChild = bstInsertRec(root->right, newNode, numCmp, duplicateFound);
+        Node *rightChild = bstInsertRec(root->right, newNode, numCmp, duplicateFound);
         if (!(*duplicateFound))
         {
             root->right = rightChild;
@@ -66,7 +64,7 @@ static tNode *bstInsertRec(tNode *root, tNode *newNode, int *numCmp, int *duplic
     return root;
 }
 
-static tNode *bstSearchRec(tNode *root, string word, int *numCmp)
+static Node *bstSearchRec(Node *root, string word, int *numCmp)
 {
     if (root == NULL)
     {
@@ -89,7 +87,7 @@ static tNode *bstSearchRec(tNode *root, string word, int *numCmp)
     }
 }
 
-static void bstFreeRec(tNode *root)
+static void bstFreeRec(Node *root)
 {
     if (root == NULL)
         return;
@@ -104,7 +102,7 @@ static void bstFreeRec(tNode *root)
     free(root);
 }
 
-int searchWord(tNode* node, string word, tNode** currNode, tNode** lastNode) {
+int searchWord(Node* node, string word, Node** currNode, Node** lasNode) {
     if (node == NULL) return 0;
 
     if (strcmp(node->word, word) == 0) {
@@ -112,16 +110,16 @@ int searchWord(tNode* node, string word, tNode** currNode, tNode** lastNode) {
         return 1;
     }
     else if (strcmp(word, node->word) < 0) {
-        if (!node->left) *lastNode = node;
-        return searchWord(node->left, word, currNode, lastNode);
+        if (!node->left) *lasNode = node;
+        return searchWord(node->left, word, currNode, lasNode);
     }
     else {
-        if (!node->right) *lastNode = node;
-        return searchWord(node->right, word, currNode, lastNode);
+        if (!node->right) *lasNode = node;
+        return searchWord(node->right, word, currNode, lasNode);
     }
 }
 
-struct InsertResult insert(bTree *tree, string word, int docId)
+struct InsertResult insert(BinaryTree *tree, string word, int docId)
 {
     struct InsertResult result;
     result.numComparisons = 0;
@@ -138,7 +136,7 @@ struct InsertResult insert(bTree *tree, string word, int docId)
     // First case: tree is empty
     if (tree->root == NULL)
     {
-        tNode *newNode = createNodeWithWord(word, docId);
+        Node *newNode = createNodeWithWord(word, docId);
         tree->root = newNode;
         tree->root->height = 1;
         newNode->parent = NULL;
@@ -149,13 +147,13 @@ struct InsertResult insert(bTree *tree, string word, int docId)
     }
 
     // Second case: tree is not empty
-    // tNode *newNode = createNodeWithWord(word, docId);
+    // Node *newNode = createNodeWithWord(word, docId);
     // int duplicateFound = 0;
-    // tNode *updatedRoot = bstInsertRec(tree->root, newNode, &result.numComparisons, &duplicateFound);
+    // Node *updatedRoot = bstInsertRec(tree->root, newNode, &result.numComparisons, &duplicateFound);
 
-    tNode* lastNode = NULL;
-    tNode* currNode = NULL;
-    int isDuplicate = searchWord(tree->root, word, &currNode, &lastNode);
+    Node* lasNode = NULL;
+    Node* currNode = NULL;
+    int isDuplicate = searchWord(tree->root, word, &currNode, &lasNode);
 
 
     if (isDuplicate)
@@ -165,17 +163,17 @@ struct InsertResult insert(bTree *tree, string word, int docId)
     else
     {
 
-        tNode *newNode = createNodeWithWord(word, docId);
+        Node *newNode = createNodeWithWord(word, docId);
         // printf("%s\n", word);
-        if (strcmp(lastNode->word, newNode->word) < 0) {
-            lastNode->right = newNode;
-            newNode->parent = lastNode;
+        if (strcmp(lasNode->word, newNode->word) < 0) {
+            lasNode->right = newNode;
+            newNode->parent = lasNode;
             newNode->height = newNode->parent->height + 1;
 
         }
         else {
-            lastNode->left = newNode;
-            newNode->parent = lastNode;
+            lasNode->left = newNode;
+            newNode->parent = lasNode;
             newNode->height = newNode->parent->height + 1;
 
         }
@@ -187,7 +185,7 @@ struct InsertResult insert(bTree *tree, string word, int docId)
     return result;
 }
 
-struct SearchResult search(bTree *tree, string word)
+struct SearchResult search(BinaryTree *tree, string word)
 {
     struct SearchResult result;
     result.found = 0;
@@ -202,9 +200,9 @@ struct SearchResult search(bTree *tree, string word)
     }
 
     clock_t start = clock();
-    tNode* lastNode = NULL;
-    tNode* currNode = NULL;
-    int wordFound = searchWord(tree->root, word, &currNode, &lastNode);
+    Node* lasNode = NULL;
+    Node* currNode = NULL;
+    int wordFound = searchWord(tree->root, word, &currNode, &lasNode);
     if (wordFound)
     {
         result.found = 1;
@@ -222,7 +220,7 @@ struct SearchResult search(bTree *tree, string word)
     return result;
 }
 
-void destroy(bTree *tree)
+void destroy(BinaryTree *tree)
 {
     if (tree == NULL)
         return;

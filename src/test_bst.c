@@ -10,7 +10,7 @@
  *     levou e o tempo de execução;
  *   — caso encontrada, percorre a lista de documentIds e imprime todos.
  */
-static void printSearchResult(bTree *tree, const char *word) {
+static void printSearchResult(BinaryTree *tree, const char *word) {
     struct SearchResult sr = search(tree, (string)word);
 
     if (sr.found) {
@@ -39,7 +39,7 @@ static void printSearchResult(bTree *tree, const char *word) {
 }
 
 int main() {
-    bTree *tree = create();
+    BinaryTree *tree = create();
     struct InsertResult ir;
 
     // 1) Inserções de palavras distintas em diferentes documentos

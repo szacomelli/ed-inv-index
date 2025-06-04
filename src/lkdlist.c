@@ -11,7 +11,7 @@ lkdList* createList(string type) {
     return list;
 }
 
-node* createNode(void* value, string type) {
+node* createlNode(void* value, string type) {
     node* Node = (node*) malloc(sizeof(node));
     Node->value = value;
     Node->index = -1;

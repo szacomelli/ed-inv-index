@@ -4,10 +4,10 @@
 #include "data.h"
 
 // building the tree
-bTree* buildTree(string** docInfo, string mode) {
+BinaryTree* buildTree(string** docInfo, string mode) {
     clock_t start = clock();
     // for the stats
-    bTree* tree = create();
+    BinaryTree* tree = create();
     float totalInsTime = 0;
     float meanInsTime = 0;
     int count = 0;
@@ -65,7 +65,7 @@ int main(int argc, char *argv[]) {
 
 
 
-    bTree* tree = buildTree(docInfo, argv[1]);
+    BinaryTree* tree = buildTree(docInfo, argv[1]);
 
 
     char prConf = '0';

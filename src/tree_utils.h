@@ -1,24 +1,24 @@
 #include "str.h"
 #include "lkdlist.h"
 
-typedef struct tNode {
+typedef struct Node {
     string word;
     lkdList* documentIds;
-    struct tNode* parent;
-    struct tNode* left;
-    struct tNode* right;
+    struct Node* parent;
+    struct Node* left;
+    struct Node* right;
     int height;    // usado na AVL
     int isRed;     // usado na RBT
-} tNode;
+} Node;
 
 typedef struct BinaryTree {
-    tNode* root;
-    tNode* NIL;  // usado na RBT (Opcional)
-} bTree;
+    Node* root;
+    Node* NIL;  // usado na RBT (Opcional)
+} BinaryTree;
 
-tNode* createtNode();
+Node* createNode();
 
-bTree* createTree();
+BinaryTree* createTree();
 
 // auxiliares
 
@@ -36,8 +36,8 @@ struct SearchResult {
     // <Possíveis outras variáveis>
 };
 
-void printIndex(bTree* tree);
+void printIndex(BinaryTree* tree);
 
-void saveTree(bTree* tree);
+void saveTree(BinaryTree* tree);
 
-void printTree(bTree* tree);
+void printTree(BinaryTree* tree);

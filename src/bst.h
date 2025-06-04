@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "tree_utils.h"  // typedefs tNode, bTree, InsertResult, SearchResult, createtNode(), createTree()
+#include "tree_utils.h"  // typedefs tNode, BinaryTree, InsertResult, SearchResult, createtNode(), createTree()
 
 /* @brief Creates an empty binary tree.
  *
@@ -21,7 +21,7 @@
  *         - numComparisons: Number of comparisons made during insertion
  *         - executionTime: Time taken to perform the insertion in seconds
  */
-struct InsertResult insert(bTree* tree, string word, int docId);
+struct InsertResult insert(BinaryTree* tree, string word, int docId);
 
 /* @brief Searches for a word in the binary tree.
  *
@@ -32,7 +32,7 @@ struct InsertResult insert(bTree* tree, string word, int docId);
  *         - found: 1 if the word was found, 0 otherwise
  *         - documentIds: A linked list of document IDs where the word was found
  */
-struct SearchResult search(bTree* tree, string word);
+struct SearchResult search(BinaryTree* tree, string word);
 
 /* @brief Frees the binary tree, its nodes, words and ID lists.
  *
@@ -40,4 +40,4 @@ struct SearchResult search(bTree* tree, string word);
  *
  * @param tree Pointer to the binary tree
  */
-void destroy(bTree* tree);
+void destroy(BinaryTree* tree);

@@ -4,12 +4,12 @@
 
 #define capacity(object) (sizeof(object)/sizeof(object[0]))
 
-typedef struct Node {
+typedef struct lNode {
     void* value;
     int index;
     string type;
-    struct Node* prev;
-    struct Node* next;
+    struct lNode* prev;
+    struct lNode* next;
     int valueSize;
 } node;
 
@@ -24,7 +24,7 @@ lkdList* createList(string type);
 
 void memCopy(void* dst, void* src, int numBytes);
 
-node* createNode(void* value, string type);
+node* createlNode(void* value, string type);
 
 void insertNode(lkdList* List, node* Node);
 

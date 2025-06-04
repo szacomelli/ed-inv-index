@@ -6,8 +6,8 @@
 
 #define max(a ,b) (((a)>(b)) ? (a) : (b))
 
-tNode* createtNode() {
-    tNode* node = malloc(sizeof(tNode));
+Node* createNode() {
+    Node* node = malloc(sizeof(Node));
     node->word = NULL;
 
     node->documentIds = createList("int");
@@ -19,16 +19,16 @@ tNode* createtNode() {
     return node;
 }
 
-bTree* createTree() {
-    tNode* root;
-    tNode* NIL;
-    bTree* tree = malloc(sizeof(bTree));
+BinaryTree* createTree() {
+    Node* root;
+    Node* NIL;
+    BinaryTree* tree = malloc(sizeof(BinaryTree));
     tree->root = NULL;
     tree->NIL = NULL;
     return tree;
 }
 
-int prtIndexAux(tNode* tnode, int idx) {
+int prtIndexAux(Node* tnode, int idx) {
     if (tnode == NULL) return idx - 1;
     printf("%d. %s: ", idx, tnode->word);
     node* iterator = tnode->documentIds->head;
@@ -46,7 +46,7 @@ int prtIndexAux(tNode* tnode, int idx) {
 
 }
 
-void pTreeAux(tNode* node, int* idxs, int col, int plus, int height) {
+void pTreeAux(Node* node, int* idxs, int col, int plus, int height) {
     if (!node) return;
     int tmp = 0;
     if (plus) idxs[col] = 1;
@@ -67,7 +67,7 @@ void pTreeAux(tNode* node, int* idxs, int col, int plus, int height) {
     return;
 }
 
-int calculateHeight(tNode* node) {
+int calculateHeight(Node* node) {
     if (node == NULL) return 0;
     printf("%d\n",node->height);
     int left = (calculateHeight(node->left) + 1);
@@ -75,7 +75,7 @@ int calculateHeight(tNode* node) {
     return max(left, right);
 }
 
-void printTree(bTree* tree) {
+void printTree(BinaryTree* tree) {
     setlocale(LC_CTYPE, "");
     // int *idxs = calloc(tree->root->height, 4);
 
@@ -88,14 +88,14 @@ void printTree(bTree* tree) {
     return;
 }
 
-void printIndex(bTree* tree) {
+void printIndex(BinaryTree* tree) {
     if (tree == NULL) return;
-    tNode* iterator = tree->root;
+    Node* iterator = tree->root;
     int currIndex = prtIndexAux(iterator, 0);
     return;
 }
 
-int getMaxID(tNode* node) {
+int getMaxID(Node* node) {
     if (node == NULL) return 0;
 
     int left = getMaxID(node->left);
@@ -108,7 +108,7 @@ int getMaxID(tNode* node) {
     return currID;
 }
 
-void svTreeAux(tNode* node, int maxID, FILE* file) {
+void svTreeAux(Node* node, int maxID, FILE* file) {
     if (node == NULL) return;
     int color1 = 225*(((float) maxID - node->documentIds->size)/maxID) + 30;
     int color2 = 111*(((float) maxID - node->documentIds->size)/maxID) + 144;
@@ -129,7 +129,7 @@ void svTreeAux(tNode* node, int maxID, FILE* file) {
     return;
 }
 
-void saveTree(bTree* tree) {
+void saveTree(BinaryTree* tree) {
     FILE* file = fopen("test.txt", "w");
     if (file == NULL) return;
 
