@@ -180,8 +180,8 @@ void getIndexValue(lkdList* list, int index, void* value) {
 void freeNode(node* Node, node** pvNode, node** nxNode) {
     if (Node == NULL) return;
     // else if (pvNode == NULL || nxNode == NULL) return;
-    if (Node->next) *nxNode = Node->next;
-    if (Node->prev) *pvNode = Node->prev;
+    *nxNode = Node->next;
+    *pvNode = Node->prev;
 
     Node->next = NULL;
     Node->prev = NULL;

@@ -1,5 +1,8 @@
 #include <stdio.h>
+// #include
 #include "tree_utils.h"
+#include <wchar.h>
+#include <locale.h>
 
 tNode* createtNode() {
     tNode* node = malloc(sizeof(tNode));
@@ -46,16 +49,16 @@ void pTreeAux(tNode* node, int* idxs, int col, int plus, int height) {
     int tmp = 0;
     if (plus) idxs[col] = 1;
     for (tmp = 0; tmp < col; tmp++)
-        printf("%c ", *(idxs + tmp)? 179 : ' ');
+        printf("%lc ", *(idxs + tmp)? 179 : ' ');
     if (node->left && node->right) {
-        printf("%c%c%c%c %s [%d]\n", plus? 195 : 192, 196, 194, 196, node->word, node->documentIds->size);
+        printf("%lc%lc%lc%lc %s [%d]\n", plus? 195 : 192, 196, 194, 196, node->word, node->documentIds->size);
         pTreeAux(node->left, idxs, col+1, 1, height);
         pTreeAux(node->right, idxs, col+1, 0, height);
     } else if (node->left || node->right) {
-        printf("%c%c%c%c %s [%d]\n", plus? 195 : 192, 196, 194, 196, node->word, node->documentIds->size);
+        printf("%lc%lc%lc%lc %s [%d]\n", plus? 195 : 192, 196, 194, 196, node->word, node->documentIds->size);
         pTreeAux((node->left)? node->left : node->right, idxs, col+1, 0, height);
     } else {
-        printf("%c%c%c%c %s [%d]\n", plus? 195 : 192, 196, 196, 196, node->word, node->documentIds->size);
+        printf("%lc%lc%lc%lc %s [%d]\n", plus? 195 : 192, 196, 196, 196, node->word, node->documentIds->size);
     }
     if (idxs[height]) idxs[height] = 0;
     idxs[col] = 0;
@@ -63,6 +66,7 @@ void pTreeAux(tNode* node, int* idxs, int col, int plus, int height) {
 }
 
 void printTree(bTree* tree) {
+    setlocale(LC_CTYPE, "");
     int *idxs = calloc(tree->root->height, 4);
     for(int tmp = 0; tmp < tree->root->height; tmp++) *(idxs + tmp) = 0;
     pTreeAux(tree->root, idxs, 0, 0, tree->root->height);

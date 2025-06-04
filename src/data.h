@@ -16,7 +16,12 @@ string* readTxts(string path, const int start, const int end);
 /* Returns the triple pointer to all the strings
 *  where all the double pointers refers to a
 *  different documents. *(return + i) refers to the
-*  document i, and *(*(return + i) + j) refers to 
+*  document i, and *(*(return + i) + j) refers to
 *  the word j of the document i
 */
 string** readStrs(string path, const int start, const int end);
+
+
+/* Free all document and word pointers
+*/
+void freeDocs(string** allTxt);

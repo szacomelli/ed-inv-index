@@ -10,8 +10,8 @@ int docSize(FILE* buffer) {
 }
 
 string readSingle(string path, int numDoc) {
-    string name = malloc(strSize(path) + 10);
-    snprintf(name, 19, "%s%d.txt\0", path, numDoc);
+    string name = malloc(strSize(path) + 20);
+    snprintf(name, 29, "%s%d.txt\0", path, numDoc);
     FILE* doc = fopen(name, "r");
 
     if (!doc) {
@@ -50,4 +50,25 @@ string** readStrs(string path, const int start, const int end) {
     }
     *(allStrs + end) = NULL;
     return allStrs;
+}
+
+void freeDocs(string** allTxt) {
+    int len = 0;
+    while (allTxt[len]) len++;
+    for (int i = 0; i < len; i++) {
+        if (i % 1000 == 0 && i != 0) printf("Documents freed: %d\n", i);
+        // printf("%d", i);
+        int docLen = 0;
+
+        // while (allTxt[i][docLen]) docLen++;
+        // for (int j = 0; j < docLen; j++) {
+        //     free(allTxt[i][j]);
+
+
+        // }
+        free(allTxt[i]);
+    }
+    free(allTxt);
+    printf("All documents were freed\n");
+    return;
 }

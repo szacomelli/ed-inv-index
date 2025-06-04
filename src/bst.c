@@ -429,5 +429,6 @@ void destroy(bTree *tree)
     {
         bstFreeRec(tree->root);
         tree->root = NULL;
+        free(tree);
     }
 }

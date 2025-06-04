@@ -32,7 +32,7 @@ bTree* buildTree(string** docInfo, string mode) {
     int maxHeight = 0;
     while (docInfo[len]) len++;
     for (int i = 0; i < len; i++) {
-        if (i % 1000 == 0) printf("Documents scanned: %d\n", i);
+        if (i % 1000 == 0 && i != 0) printf("Documents scanned: %d\n", i);
         // printf("%d", i);
         int docLen = 0;
         while (docInfo[i][docLen]) docLen++;
@@ -48,7 +48,7 @@ bTree* buildTree(string** docInfo, string mode) {
     meanInsTime = ((float)totalInsTime)/count;
     clock_t end = clock();
     clock_t totalTime = ((double)(end - start))/CLOCKS_PER_SEC;
-    printf("All documents were scanned\n");
+    printf("All %d documents were scanned\n", len);
     if (strcmp(mode, "stats") == 0) printf(
         "Total insertion time: %lf\nMean insertion time: %lf\nNumber of words: %d\nTree build time:%lf\n",
         totalInsTime, meanInsTime, count, totalTime
@@ -61,7 +61,10 @@ bTree* buildTree(string** docInfo, string mode) {
 
 int main(int argc, char *argv[]) {
 
-    if (argc < 4) {printf("WRONG USAGE: too few arguments\n"); return 1;}
+    if (argc < 4) {
+        printf("WRONG USAGE: too few arguments\n(usage: ./PROGRAM MODE NUMBER_OF_FILES PATH_TO_FILE)");
+        return 1;
+    }
     if (strcmp(argv[1], "search") != 0 && strcmp(argv[1], "stats") != 0) {
         printf("The supported modes are \"search\" and \"stats\", not \"%s\"\n", argv[1]);
         return 1;
@@ -103,7 +106,8 @@ int main(int argc, char *argv[]) {
     else printf("Word not found...\n");
 
 
+    // printTree(tree);
+    destroy(tree);
 
-
-
+    freeDocs(docInfo);
 }
