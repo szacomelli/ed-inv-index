@@ -96,10 +96,13 @@ static void bstFreeRec(Node *root)
     bstFreeRec(root->right);
 
     freeList(root->documentIds);
+    root->documentIds = NULL;
 
     free(root->word);
+    root->word = NULL;
 
     free(root);
+    root = NULL;
 }
 
 int searchWord(Node* node, string word, Node** currNode, Node** lasNode) {
@@ -111,11 +114,11 @@ int searchWord(Node* node, string word, Node** currNode, Node** lasNode) {
     }
     else if (strcmp(word, node->word) < 0) {
         if (!node->left) *lasNode = node;
-        return searchWord(node->left, word, currNode, lasNode);
+        return searchWord(node->left, word, currNode, lasNode) + 1;
     }
     else {
         if (!node->right) *lasNode = node;
-        return searchWord(node->right, word, currNode, lasNode);
+        return searchWord(node->right, word, currNode, lasNode) + 1;
     }
 }
 
@@ -140,23 +143,19 @@ struct InsertResult insertBST(BinaryTree *tree, string word, int docId)
         tree->root = newNode;
         tree->root->height = 1;
         newNode->parent = NULL;
-        result.numComparisons = 1;
+        result.numComparisons = 0;
         clock_t end = clock();
         result.executionTime = ((double)(end - start)) / CLOCKS_PER_SEC;
         return result;
     }
 
     // Second case: tree is not empty
-    // Node *newNode = createNodeWithWord(word, docId);
-    // int duplicateFound = 0;
-    // Node *updatedRoot = bstInsertRec(tree->root, newNode, &result.numComparisons, &duplicateFound);
-
     Node* lasNode = NULL;
     Node* currNode = NULL;
-    int isDuplicate = searchWord(tree->root, word, &currNode, &lasNode);
+    result.numComparisons = searchWord(tree->root, word, &currNode, &lasNode);
 
 
-    if (isDuplicate)
+    if (currNode) // If currNode isn't NULL (i.e. if word was founded and the pointer changed)
     {
         insertValue(currNode->documentIds, &docId);
     }
@@ -164,7 +163,6 @@ struct InsertResult insertBST(BinaryTree *tree, string word, int docId)
     {
 
         Node *newNode = createNodeWithWord(word, docId);
-        // printf("%s\n", word);
         if (strcmp(lasNode->word, newNode->word) < 0) {
             lasNode->right = newNode;
             newNode->parent = lasNode;
@@ -202,12 +200,11 @@ struct SearchResult searchBST(BinaryTree *tree, string word)
     clock_t start = clock();
     Node* lasNode = NULL;
     Node* currNode = NULL;
-    int wordFound = searchWord(tree->root, word, &currNode, &lasNode);
-    if (wordFound)
+    result.numComparisons = searchWord(tree->root, word, &currNode, &lasNode);
+    if (currNode)
     {
         result.found = 1;
         result.documentIds = currNode->documentIds;
-        result.numComparisons = currNode->height;
     }
     else
     {
@@ -229,5 +226,6 @@ void destroyBST(BinaryTree *tree)
         bstFreeRec(tree->root);
         tree->root = NULL;
         free(tree);
+        tree = NULL;
     }
 }
