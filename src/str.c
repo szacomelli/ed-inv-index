@@ -11,7 +11,7 @@ int strcmp(string strOne, string strTwo) {
         else if (strTwo[currI] == '\0') return 1;
         else if (strOne[currI] < strTwo[currI]) return -1;
         else if (strOne[currI] > strTwo[currI]) return 1;
-        currI += 1;
+        currI++;
     }
     return 0;
 }
@@ -20,7 +20,10 @@ int countChar(string txt, char wanted) {
     if (!txt) return 0;
     int count = 0;
     int idx = 0;
-    while (txt[idx]) if(txt[idx++] == wanted) count++;
+    while (txt[idx]) {
+        if(txt[idx] == wanted) count++;
+        idx++;
+    }
     return count;
 }
 
@@ -57,9 +60,16 @@ void strCopy(string src, string dst) {
         printf("Error in strCopy(): 'src' pointer is NULL;\n");
         exit(1);
     }
-    int len = strSize(src);
+    // int len = strSize(src);
     int idx = 0;
-    while (idx < len) dst[idx++] = src[idx];
+    // while (idx < len) {
+    //     dst[idx] = src[idx];
+    //     idx++;
+    // }
+    while (src[idx]) {
+        dst[idx] = src[idx];
+        idx++;
+    }
     dst[idx] = '\0';
 }
 
@@ -73,10 +83,19 @@ void strConcat(string strOne, string strTwo, string result, char sep) {
     }
     int idxR = 0;
     int idx = 0;
-    while(strOne[idx]) result[idxR++] = strOne[idx++];
-    if (sep) result[idxR++] = sep;
+    while(strOne[idx]) {
+        result[idxR] = strOne[idx];
+        idxR++; idx++;
+    }
+    if (sep) {
+        result[idxR++] = sep;
+        idxR++;
+    }
     idx = 0;
-    while(strTwo[idx]) result[idxR++] = strTwo[idx++];
+    while(strTwo[idx]) {
+        result[idxR] = strTwo[idx];
+        idxR++; idx++;
+    }
     result[idxR] = '\0';
 }
 
@@ -109,12 +128,12 @@ int isSubstr(string strOne, string strTwo) {
     int actT = 0;
     while (strTwo[actT]) {
         if (strTwo[actT] == strOne[0]) {
-            while(strOne[actO] == strTwo[actT + actO]) actO ++;
+            while(strOne[actO] == strTwo[actT + actO]) actO++;
             if (strOne[actO] == '\0') return 1;
             actO = 0;
         }
         else if (strTwo[actT] == '\0') return 0;
-        actT += 1;
+        actT++;
     }
     return 0;
 }
