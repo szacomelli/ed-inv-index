@@ -1,6 +1,6 @@
 #include "bst.h"
 
-
+#define create createTree();
 
 static tNode *createNodeWithWord(string word, int docId)
 {
