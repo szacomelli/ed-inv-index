@@ -7,7 +7,7 @@
 BinaryTree* buildTree(string** docInfo, string mode) {
     clock_t start = clock();
     // for the stats
-    BinaryTree* tree = create();
+    BinaryTree* tree = createBST();
     float totalInsTime = 0;
     float meanInsTime = 0;
     int count = 0;
