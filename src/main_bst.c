@@ -59,7 +59,7 @@ int main(int argc, char *argv[]) {
     for (int i=0; i < strSize(argv[2]); i++)
     if (argv[2][i] < 48 || argv[2][i] > 57) {printf("WRONG USAGE: first argument must be a number\n"); return 1;}
 
-    int docNumber = atoi(argv[2]) > -1 ? (atoi(argv[2]) <= 10102 ? atoi(argv[2]) : 10102) : 0;
+    int docNumber = atoi(argv[2]) > -1 ? atoi(argv[2]) : 0;
 
     string** docInfo = readStrs(argv[3], 0, docNumber);
 

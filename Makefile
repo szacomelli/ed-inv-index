@@ -27,5 +27,5 @@ clear:
 else
     detected_OS := $(shell uname)  # same as "uname -s"
 clear:
-	rm *.out *.exe *.o ./src/*.o ./src/*.exe ./src/*.out
+	rm *.out *.exe *.o ./src/*.o ./src/*.exe ./src/*.out main_bst test_bst
 endif

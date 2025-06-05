@@ -34,8 +34,6 @@ Node* createNode() {
 }
 
 BinaryTree* createTree() {
-    Node* root;
-    Node* NIL;
     BinaryTree* tree = malloc(sizeof(BinaryTree));
     tree->root = NULL;
     tree->NIL = NULL;
@@ -89,6 +87,7 @@ int calculateHeight(Node* node) {
 }
 
 void printTree(BinaryTree* tree) {
+    if (tree == NULL || tree->root == NULL) return;
     #ifndef _WIN32
         setlocale(LC_CTYPE, "");
     #endif
