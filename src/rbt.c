@@ -127,16 +127,62 @@ struct InsertResult insertRBT(BinaryTree* tree, const string word, int docID) {
       if (nCase == 1) firstHelper(newNode, tree->NIL);
       else if (nCase == 2) secondHelper(newNode);
       else if (nCase == 3) thirdHelper(newNode);
-      // unfinished
-
     }
-    
 
-
-
+    result.numComparisons = numComp;
   }
 
   clock_t totalTime = (double) (clock() - startTime)/CLOCKS_PER_SEC;
   result.executionTime = totalTime;
   return result;
+}
+
+struct SearchResult searchRBT(BinaryTree* tree, const string word) {
+  struct SearchResult result;
+  result.found = 0;
+  result.documentIds = NULL;
+  int numComp = 0;
+  Node* iterator = tree->root;
+  while (iterator != tree->NIL) {
+    numComp++;
+    if (strcmp(word, iterator->word) < 0) iterator = iterator->left;
+    else if (strcmp(word, iterator->word) > 0) iterator = iterator->right;
+    else {
+      result.found = 1;
+      result.documentIds = iterator->documentIds;
+    }
+  }
+  result.numComparisons = numComp;
+  return result;
+}
+
+static void bstFreeRec(Node *root, Node* NIL)
+{
+  if (root == NIL) return;
+
+  bstFreeRec(root->left, NIL);
+  bstFreeRec(root->right, NIL);
+
+   freeList(root->documentIds);
+   root->documentIds = NULL;
+
+   free(root->word);
+   root->word = NULL;
+   
+   free(root);
+   root = NULL;
+}
+
+void destroyRBT(BinaryTree *tree)
+{
+  if (tree == NULL) return;
+  if (tree->root != NULL)
+  {
+    bstFreeRec(tree->root, tree->NIL);
+    tree->root = NULL;
+    free(tree->NIL);
+    tree->NIL = NULL;
+    free(tree);
+    tree = NULL;
+  }
 }
