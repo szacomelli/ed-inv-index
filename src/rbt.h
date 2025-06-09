@@ -8,3 +8,9 @@ struct InsertResult insertRBT(BinaryTree* tree, const string word, int documentI
 struct SearchResult searchRBT(BinaryTree* tree, const string word);
 
 void destroyRBT(BinaryTree* tree);
+
+// void firstHelper(Node* node, Node* NIL);
+
+// void secondHelper(Node* node, BinaryTree* tree);
+
+// void thirdHelper(Node* node);
