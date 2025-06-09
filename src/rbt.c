@@ -80,7 +80,7 @@ void secondHelper(Node* node) {
 }
 
 
-struct InsertResult insertRBT(BinaryTree* tree, const string word, int docID) {
+struct InsertResult insertRBT(BinaryTree* tree, string word, int docID) {
   if (!tree || !word || docID < 0) {
     struct InsertResult result = {.executionTime = 0, .numComparisons = 0}; 
     return result;
@@ -104,25 +104,29 @@ struct InsertResult insertRBT(BinaryTree* tree, const string word, int docID) {
     result.numComparisons = 0;
   }
   else {
-
-    struct SearchResult findDup = searchRBT(tree, word);
-    if (findDup.found) {
-      insertValue(findDup.documentIds, &docID);
-      clock_t totalTime = (double) (clock() - startTime)/CLOCKS_PER_SEC;
-      result.executionTime = totalTime;
-      result.numComparisons = findDup.numComparisons;
-      return result;
-    }
-    
     Node* iterator = tree->root;
     Node* last = NULL;
     int numComp = 0;
+    int found = 0;
+    
     while (iterator != tree->NIL) {
       numComp++;
       last = iterator;
       if (strcmp(word, iterator->word) < 0) iterator = iterator->left; 
       else if (strcmp(word, iterator->word) > 0) iterator = iterator->right;
+      else if (strcmp(word, iterator->word) == 0) {
+        found++;
+        break;
+      }
     }
+    if (found) {
+      insertValue(iterator->documentIds, &docID);
+      clock_t totalTime = (double) (clock() - startTime)/CLOCKS_PER_SEC;
+      result.executionTime = totalTime;
+      result.numComparisons = numComp;
+      return result;
+    }
+
     Node* newNode = createNode();
     newNode->word = (string)malloc( strSize(word) + 1);
     strCopy(word, newNode->word);
@@ -159,7 +163,7 @@ struct InsertResult insertRBT(BinaryTree* tree, const string word, int docID) {
   return result;
 }
 
-struct SearchResult searchRBT(BinaryTree* tree, const string word) {
+struct SearchResult searchRBT(BinaryTree* tree, string word) {
   struct SearchResult result;
   result.found = 0;
   result.documentIds = NULL;

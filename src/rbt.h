@@ -3,9 +3,9 @@
 
 BinaryTree* createRBT();
 
-struct InsertResult insertRBT(BinaryTree* tree, const string word, int documentId);
+struct InsertResult insertRBT(BinaryTree* tree, string word, int documentId);
 
-struct SearchResult searchRBT(BinaryTree* tree, const string word);
+struct SearchResult searchRBT(BinaryTree* tree, string word);
 
 void destroyRBT(BinaryTree* tree);
 
