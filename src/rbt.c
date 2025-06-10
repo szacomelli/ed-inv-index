@@ -3,6 +3,10 @@
 BinaryTree* createRBT() {
   BinaryTree* tree = createTree();
   tree->NIL = createNode();
+  if (!tree->NIL || !tree) {
+    printf("Error creating BRT\n");
+    return NULL;
+  }
   tree->NIL->height = 0;
   tree->NIL->word = (string)malloc(4);
   strCopy("NIL", tree->NIL->word);
@@ -11,21 +15,25 @@ BinaryTree* createRBT() {
 
 void rotate(Node* node, int isRight) {
   if (isRight) {
+    // saves the branches that will be implanted somewhere else
     Node* leftChild = node->left;
     Node* newLeft = leftChild->right;
 
+    // in case of a parent, re-point the parent/next pointers
     leftChild->parent = node->parent;
     if (node->parent && leftChild->parent->left == node) leftChild->parent->left = leftChild;
     else if (node->parent && leftChild->parent->right == node) leftChild->parent->right = leftChild;
 
+    // repointing the nodes, the rotation itself
     leftChild->right = node;
     node->parent = leftChild;
     node->left = newLeft;
 
+    // in case of leftChild having a branch
     if (newLeft) newLeft->parent = node;
     
   }
-  else {
+  else { // everything is the same as above
     Node* rightChild = node->right;
     Node* newRight = rightChild->left;
 
@@ -41,6 +49,8 @@ void rotate(Node* node, int isRight) {
   return;
 }
 
+// get the case the insert is currently stuck in
+// 1: red uncle. 2: black uncle, symmetric case. 3: black uncle, asymmetric case
 int getCase(Node* node) {
   int parLeft = 0;
   Node* grand = node->parent->parent;
@@ -50,17 +60,22 @@ int getCase(Node* node) {
   else return 3;
 }
 
+// helper function to resolve the first insertion case
 void firstHelper(Node* node, Node* NIL) {
-  if (node->parent == NIL || node->parent->parent == NIL) return;
+  if (node->parent == NIL || node->parent->parent == NIL) return; // ensures we're not dealing with root or invalid nodes
   Node* grand = node->parent->parent;
+  // sets colors
   node->parent->isRed = 0;
   grand->isRed = 1;
   if (grand->right == node->parent) grand->left->isRed = 0;
   else if (grand->left == node->parent) grand->right->isRed = 0;
+  // call recursive function to recolor above nodes
   firstHelper(grand, NIL);
 }
 
+// helper for the third case (it's used by second)
 void thirdHelper(Node* node) {
+  // does the recoloring and rotations to rebalance the tree
   node->parent->isRed = 0;
   node->parent->parent->isRed = 1;
   if (node->parent->parent->left == node->parent) rotate(node->parent->parent, 1);
@@ -68,6 +83,7 @@ void thirdHelper(Node* node) {
 
 }
 
+// helper for second case (reducts to symmetric third case and calls the third helper)
 void secondHelper(Node* node) {
   if (node->parent->parent->left == node->parent) {
     rotate(node->parent, 0); 
@@ -138,7 +154,7 @@ struct InsertResult insertRBT(BinaryTree* tree, string word, int docID) {
     if (strcmp(word, last->word) < 0) last->left = newNode;
     else last->right = newNode;
     newNode->parent = last;
-      
+    newNode->height = calculateHeight(tree->root, tree->NIL);
     
     if (last->isRed) {
       int nCase = getCase(newNode);
