@@ -137,3 +137,77 @@ Node* rebalance(Node* node) {
     // Already balanced
     return node;
 }
+
+InsertResult insert(BinaryTree* tree, const string word, int documentId) {
+    InsertResult result = {0};
+    result.status = INSERT_FAILURE;  // default to failure
+    result.numComparisons = 0;
+    clock_t start = clock();
+
+    if (!tree || !word) {
+        return result;  // invalid input
+    }
+
+    if (tree->root == NULL) {
+        // Tree is empty, create root node
+        tree->root = createNode(word, documentId);
+        if (tree->root == NULL) {
+            return result;
+        }
+        result.status = INSERT_SUCCESS;
+        result.numComparisons = 1;
+        result.executionTime = (double)(clock() - start) / CLOCKS_PER_SEC;
+        return result;
+    }
+
+    Node* current = tree->root;
+    Node* parent = NULL;
+    int cmp = 0;
+
+    // Traverse the tree to find the insert position or duplicate
+    while (current != NULL) {
+        parent = current;
+        cmp = strcmp(word, current->word);
+        result.numComparisons++;
+
+        if (cmp == 0) {
+            // Word already exists, add documentId if new
+            if (lookupValue(current->documentIds, &documentId) == -1) {
+                insertValue(current->documentIds, &documentId);
+            }
+            result.status = INSERT_DUPLICATE;
+            result.executionTime = (double)(clock() - start) / CLOCKS_PER_SEC;
+            return result;
+        } 
+        else if (cmp < 0) {
+            current = current->left;
+        } 
+        else {
+            current = current->right;
+        }
+    }
+
+    // Create new node and link it to the parent
+    Node* newNode = createNode(word, documentId);
+    if (newNode == NULL) {
+        return result;
+    }
+    newNode->parent = parent;
+
+    if (cmp < 0) {
+        parent->left = newNode;
+    } else {
+        parent->right = newNode;
+    }
+
+    // Rebalance tree starting from the new node's parent
+    Node* rebNode = newNode;
+    while (rebNode != NULL) {
+        rebNode = rebalance(rebNode);
+        rebNode = rebNode->parent;
+    }
+
+    result.status = INSERT_SUCCESS;
+    result.executionTime = (double)(clock() - start) / CLOCKS_PER_SEC;
+    return result;
+}

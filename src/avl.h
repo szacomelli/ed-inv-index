@@ -18,11 +18,18 @@ typedef struct {
     Node* root;         // Root of the AVL tree
 } BinaryTree;
 
+
+typedef enum {
+    INSERT_SUCCESS,
+    INSERT_DUPLICATE,
+    INSERT_FAILURE
+} InsertStatus;
+
 // Result of insert operation
 typedef struct {
     int numComparisons;    // Number of comparisons performed during insert
     double executionTime;  // Execution time of insert in seconds
-    // Add other metrics if needed
+    InsertStatus status; // Insert operation status
 } InsertResult;
 
 // Result of search operation
