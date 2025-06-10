@@ -37,6 +37,9 @@ typedef struct {
 // Creates and initializes a new empty AVL tree
 BinaryTree* create();
 
+// Creates a new AVL tree node with the given word and document ID
+Node* createNode(const string word, int documentId);
+
 // Inserts a word with the associated document ID into the AVL tree
 InsertResult insert(BinaryTree* tree, const string word, int documentId);
 
