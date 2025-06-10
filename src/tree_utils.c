@@ -1,8 +1,22 @@
 #include <stdio.h>
-// #include
 #include "tree_utils.h"
 #include <wchar.h>
 #include <locale.h>
+
+// To format printTree() according to operational system
+#ifdef _WIN32
+    #define C1 179
+    #define C2 195
+    #define C3 192
+    #define C4 196
+    #define C5 194
+#else
+    #define C1 9474
+    #define C2 9500
+    #define C3 9492
+    #define C4 9472
+    #define C5 9516
+#endif
 
 #define max(a ,b) (((a)>(b)) ? (a) : (b))
 
@@ -20,8 +34,6 @@ Node* createNode() {
 }
 
 BinaryTree* createTree() {
-    Node* root;
-    Node* NIL;
     BinaryTree* tree = malloc(sizeof(BinaryTree));
     tree->root = NULL;
     tree->NIL = NULL;
@@ -46,29 +58,29 @@ int prtIndexAux(Node* tnode, int idx) {
 
 }
 
-void pTreeAux(Node* node, int* idxs, int col, int plus, int height) {
+void pTreeAux(Node* node, int* idxs, int col, int plus) {
     if (!node) return;
     int tmp = 0;
     if (plus) idxs[col] = 1;
     for (tmp = 0; tmp < col; tmp++)
-        printf("%lc ", *(idxs + tmp)? 9474 : ' ');
+        printf("%lc ", *(idxs + tmp)? C1 : ' ');
     if (node->left && node->right) {
-        printf("%lc%lc%lc%lc %s [%d]", plus? 9500 : 9492, 9472, 9516, 9472, node->word, node->documentIds->size);
+        printf("%lc%lc%lc%lc %s [%d]", plus? C2 : C3, C4, C5, C4, node->word, node->documentIds->size);
         if (node->isRed) printf(", RED node");
         printf("\n");
-        pTreeAux(node->left, idxs, col+1, 1, height);
-        pTreeAux(node->right, idxs, col+1, 0, height);
+        pTreeAux(node->left, idxs, col+1, 1);
+        pTreeAux(node->right, idxs, col+1, 0);
     } else if (node->left || node->right) {
-        printf("%lc%lc%lc%lc %s [%d]", plus? 9500 : 9492, 9472, 9516, 9472, node->word, node->documentIds->size);
+        printf("%lc%lc%lc%lc %s [%d]", plus? C2 : C3, C4, C5, C4, node->word, node->documentIds->size);
         if (node->isRed) printf(", RED node");
         printf("\n");
-        pTreeAux((node->left)? node->left : node->right, idxs, col+1, 0, height);
+        pTreeAux((node->left)? node->left : node->right, idxs, col+1, 0);
     } else {
-        printf("%lc%lc%lc%lc %s [%d]", plus? 9500 : 9492, 9472, 9472, 9472, node->word, node->documentIds->size);
+        printf("%lc%lc%lc%lc %s [%d]", plus? C2 : C3, C4, C4, C4, node->word, node->documentIds->size);
         if (node->isRed) printf(", RED node");
         printf("\n");
     }
-    if (idxs[height]) idxs[height] = 0;
+    if (idxs[col]) idxs[col] = 0;
     idxs[col] = 0;
     return;
 }
@@ -81,14 +93,15 @@ int calculateHeight(Node* node, Node* NIL) {
 }
 
 void printTree(BinaryTree* tree) {
-    setlocale(LC_CTYPE, "");
-    // int *idxs = calloc(tree->root->height, 4);
-
+    if (tree == NULL || tree->root == NULL) return;
+    #ifndef _WIN32
+        setlocale(LC_CTYPE, "");
+    #endif
     int height = calculateHeight(tree->root, tree->NIL);
+    // setlocale(LC_CTYPE, "");
     int *idxs = malloc(height*4);
-
     for(int tmp = 0; tmp < height; tmp++) *(idxs + tmp) = 0;
-    pTreeAux(tree->root, idxs, 0, 0, height);
+    pTreeAux(tree->root, idxs, 0, 0);
     free(idxs);
     return;
 }
