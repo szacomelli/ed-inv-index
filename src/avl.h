@@ -38,7 +38,6 @@ typedef struct {
     lkdList* documentIds;  // List of document IDs where word appears (NULL if not found)
     double executionTime;  // Execution time of search in seconds
     int numComparisons;    // Number of comparisons performed during search
-    // Add other metrics if needed
 } SearchResult;
 
 // Creates and initializes a new empty AVL tree
