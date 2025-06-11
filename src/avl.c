@@ -1,10 +1,10 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
+/* #include <stdio.h> */
+/* #include <stdlib.h> */
+ #include <time.h>
 #include "avl.h"
-
+//#include "tree_utils.h"
 // Creates and initializes an empty AVL tree
-BinaryTree* create() {
+BinaryTree* createAVL() {
     BinaryTree* tree = (BinaryTree*) malloc(sizeof(BinaryTree));
     if (!tree) {
         printf("Error in create(): memory allocation failed\n");
@@ -15,10 +15,10 @@ BinaryTree* create() {
 }
 
 // Creates a new node with the given word and document ID
-Node* createNode(const string word, int documentId) {
+Node* createNodeAVL(const string word, int documentId) {
     Node* node = (Node*) malloc(sizeof(Node));
     if (!node) {
-        printf("Error in createNode(): memory allocation failed\n");
+        printf("Error in createNodeAVL(): memory allocation failed\n");
         exit(1);
     }
 
@@ -70,6 +70,10 @@ Node* rotateRight(Node* y) {
     if (T2 != NULL) T2->parent = y;
     x->parent = y->parent;
     y->parent = x;
+    if (!x->parent);
+    else if (x->parent->left == y) x->parent->left = x;
+    else x->parent->right = x;
+
 
     updateHeight(y);
     updateHeight(x);
@@ -90,6 +94,10 @@ Node* rotateLeft(Node* x) {
     if (T2 != NULL) T2->parent = x;
     y->parent = x->parent;
     x->parent = y;
+
+    if (!y->parent);
+    else if (y->parent->left == x) y->parent->left = y;
+    else y->parent->right = y;
 
     updateHeight(x);
     updateHeight(y);
@@ -129,9 +137,9 @@ Node* rebalance(Node* node) {
     return node;
 }
 
-InsertResult insert(BinaryTree* tree, const string word, int documentId) {
-    InsertResult result = {0};
-    result.status = INSERT_FAILURE;  // default to failure
+struct InsertResult insertAVL(BinaryTree* tree, const string word, int documentId) {
+    struct InsertResult result = {0};
+    result.status = 0; // Defaults to failed
     result.numComparisons = 0;
     clock_t start = clock();
 
@@ -141,11 +149,11 @@ InsertResult insert(BinaryTree* tree, const string word, int documentId) {
 
     if (tree->root == NULL) {
         // Tree is empty, create root node
-        tree->root = createNode(word, documentId);
+        tree->root = createNodeAVL(word, documentId);
         if (tree->root == NULL) {
             return result;
         }
-        result.status = INSERT_SUCCESS;
+        result.status = 1;
         result.numComparisons = 1;
         result.executionTime = (double)(clock() - start) / CLOCKS_PER_SEC;
         return result;
@@ -166,7 +174,7 @@ InsertResult insert(BinaryTree* tree, const string word, int documentId) {
             if (lookupValue(current->documentIds, &documentId) == -1) {
                 insertValue(current->documentIds, &documentId);
             }
-            result.status = INSERT_DUPLICATE;
+            result.status = 2;
             result.executionTime = (double)(clock() - start) / CLOCKS_PER_SEC;
             return result;
         } 
@@ -178,7 +186,7 @@ InsertResult insert(BinaryTree* tree, const string word, int documentId) {
         }
     }
 
-    Node* newNode = createNode(word, documentId);
+    Node* newNode = createNodeAVL(word, documentId);
     if (newNode == NULL) {
         return result;
     }
@@ -193,18 +201,21 @@ InsertResult insert(BinaryTree* tree, const string word, int documentId) {
     // Rebalance tree starting from the new node's parent
     Node* rebNode = newNode;
     while (rebNode != NULL) {
+
         rebNode = rebalance(rebNode);
+        if (rebNode->left == tree->root || rebNode->right == tree->root) tree->root = rebNode;
         rebNode = rebNode->parent;
+
     }
 
-    result.status = INSERT_SUCCESS;
+    result.status = 1;
     result.executionTime = (double)(clock() - start) / CLOCKS_PER_SEC;
     return result;
 }
 
 // Searches for a word in the AVL tree and returns the SearchResult struct.
-SearchResult search(BinaryTree* tree, const string word) {
-    SearchResult result;
+struct SearchResult searchAVL(BinaryTree* tree, const string word) {
+    struct SearchResult result;
     result.found = 0;
     result.documentIds = NULL;
     result.executionTime = 0.0;
@@ -241,19 +252,19 @@ SearchResult search(BinaryTree* tree, const string word) {
     return result;
 }
 
-void destroyNode(Node* node) {
+void destroyNodeAVL(Node* node) {
     if (node != NULL) {
-        destroyNode(node->left);
-        destroyNode(node->right);
+        destroyNodeAVL(node->left);
+        destroyNodeAVL(node->right);
         freeList(node->documentIds);
         free(node->word);
         free(node);
     }
 }
 
-void destroy(BinaryTree* tree) {
+void destroyAVL(BinaryTree* tree) {
     if (tree != NULL) {
-        destroyNode(tree->root);
+        destroyNodeAVL(tree->root);
         free(tree);
     }
 }

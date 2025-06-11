@@ -25,6 +25,7 @@ BinaryTree* createTree();
 struct InsertResult {
     int numComparisons;
     double executionTime;
+    int status; // 0 if failed; 1 if success; 2 if duplicate;
     // <Possíveis outras variáveis>
 };
 

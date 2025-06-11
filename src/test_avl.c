@@ -4,7 +4,7 @@
 
 void create_test() {
     printf("--- Create test ---\n");
-    BinaryTree* tree = create();
+    BinaryTree* tree = createAVL();
     if (tree == NULL) {
         printf("Failed to create tree.\n\n");
         return;
@@ -16,7 +16,7 @@ void create_test() {
 
 void createNode_test() {
     printf("--- createNode test --- \n");
-    Node* node = createNode("example", 42);
+    Node* node = createNodeAVL("example", 42);
     if (node == NULL) {
         printf("Failed to create node.\n\n");
         return;
@@ -39,24 +39,24 @@ void createNode_test() {
 void test_insert() {
     printf("--- Insert test ---\n");
 
-    BinaryTree* tree = create();
+    BinaryTree* tree = createAVL();
 
-    InsertResult res1 = insert(tree, "apple", 1);
-    if (res1.status != INSERT_SUCCESS) {
+    struct InsertResult res1 = insertAVL(tree, "apple", 1);
+    if (res1.status != 1) {
         printf("Test failed: insert 'apple' first time\n\n");
         free(tree);
         return;
     }
 
-    InsertResult res2 = insert(tree, "banana", 2);
-    if (res2.status != INSERT_SUCCESS) {
+    struct InsertResult res2 = insertAVL(tree, "banana", 2);
+    if (res2.status != 1) {
         printf("Test failed: insert 'banana' first time\n\n");
         free(tree);
         return;
     }
 
-    InsertResult res3 = insert(tree, "apple", 3); // duplicate word, new docId
-    if (res3.status != INSERT_DUPLICATE) {
+    struct InsertResult res3 = insertAVL(tree, "apple", 3); // duplicate word, new docId
+    if (res3.status != 2) {
         printf("Test failed: insert duplicate 'apple'\n\n");
         free(tree);
         return;
@@ -90,15 +90,17 @@ void test_search() {
     printf("--- Search test ---\n");
 
     // Create a new binary AVL tree
-    BinaryTree* tree = create();
+    BinaryTree* tree = createAVL();
 
     // Insert words and their corresponding document IDs
-    insert(tree, "apple", 1);
-    insert(tree, "banana", 2);
-    insert(tree, "carrot", 3);
-
+    insertAVL(tree, "apple", 1);
+    printTree(tree);
+    insertAVL(tree, "banana", 2);
+    printTree(tree);
+    insertAVL(tree, "carrot", 3);
+    printTree(tree);
     // Search for an existing word in the tree
-    SearchResult res1 = search(tree, "banana");
+    struct SearchResult res1 = searchAVL(tree, "banana");
     if (res1.found) {
         printf("Search test passed: 'banana' found.\n");
         printf("Number of comparisons: %d\n", res1.numComparisons);
@@ -119,7 +121,7 @@ void test_search() {
     }
 
     // Search for a word not present in the tree
-    SearchResult res2 = search(tree, "durian");
+    struct SearchResult res2 = searchAVL(tree, "durian");
     if (!res2.found) {
         printf("Search test passed: 'durian' correctly not found.\n");
     } else {
@@ -127,7 +129,7 @@ void test_search() {
     }
 
     // Free the tree after testing
-    destroy(tree);
+    destroyAVL(tree);
 }
 
 
