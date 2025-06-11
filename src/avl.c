@@ -201,3 +201,59 @@ InsertResult insert(BinaryTree* tree, const string word, int documentId) {
     result.executionTime = (double)(clock() - start) / CLOCKS_PER_SEC;
     return result;
 }
+
+// Searches for a word in the AVL tree and returns the SearchResult struct.
+SearchResult search(BinaryTree* tree, const string word) {
+    SearchResult result;
+    result.found = 0;
+    result.documentIds = NULL;
+    result.executionTime = 0.0;
+    result.numComparisons = 0;
+
+    if (tree == NULL || tree->root == NULL || word == NULL) {
+        return result;
+    }
+
+    clock_t start = clock();
+
+    Node* current = tree->root;
+    while (current != NULL) {
+        result.numComparisons++;
+        int cmp = strcmp(word, current->word);
+        printf("Comparing '%s' with '%s': %d\n", word, current->word, cmp);  // DEBUG
+        if (cmp == 0) {
+            // Word found
+            result.found = 1;
+            result.documentIds = current->documentIds;
+            break;
+        }
+        else if (cmp < 0) {
+            current = current->left;
+        }
+        else {
+            current = current->right;
+        }
+    }
+
+    clock_t end = clock();
+    result.executionTime = ((double)(end - start)) / CLOCKS_PER_SEC;
+
+    return result;
+}
+
+void destroyNode(Node* node) {
+    if (node != NULL) {
+        destroyNode(node->left);
+        destroyNode(node->right);
+        freeList(node->documentIds);
+        free(node->word);
+        free(node);
+    }
+}
+
+void destroy(BinaryTree* tree) {
+    if (tree != NULL) {
+        destroyNode(tree->root);
+        free(tree);
+    }
+}
