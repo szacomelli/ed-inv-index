@@ -52,6 +52,9 @@ InsertResult insert(BinaryTree* tree, const string word, int documentId);
 // Searches for a word in the AVL tree and returns info about it
 SearchResult search(BinaryTree* tree, const string word);
 
+// Frees all memory allocated for the a node
+void destroyNode(Node* node);
+
 // Frees all memory allocated for the AVL tree
 void destroy(BinaryTree* tree);
 
