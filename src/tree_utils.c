@@ -69,7 +69,6 @@ void pTreeAux(Node* node, int* idxs, int col, int plus, int height) {
 
 int calculateHeight(Node* node) {
     if (node == NULL) return 0;
-    printf("%d\n",node->height);
     int left = (calculateHeight(node->left) + 1);
     int right = (calculateHeight(node->right) + 1);
     return max(left, right);

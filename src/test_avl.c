@@ -94,11 +94,8 @@ void test_search() {
 
     // Insert words and their corresponding document IDs
     insertAVL(tree, "apple", 1);
-    printTree(tree);
     insertAVL(tree, "banana", 2);
-    printTree(tree);
     insertAVL(tree, "carrot", 3);
-    printTree(tree);
     // Search for an existing word in the tree
     struct SearchResult res1 = searchAVL(tree, "banana");
     if (res1.found) {
