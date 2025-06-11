@@ -1,8 +1,22 @@
 #include <stdio.h>
-// #include
 #include "tree_utils.h"
 #include <wchar.h>
 #include <locale.h>
+
+// To format printTree() according to operational system
+#ifdef _WIN32
+    #define C1 179
+    #define C2 195
+    #define C3 192
+    #define C4 196
+    #define C5 194
+#else
+    #define C1 9474
+    #define C2 9500
+    #define C3 9492
+    #define C4 9472
+    #define C5 9516
+#endif
 
 #define max(a ,b) (((a)>(b)) ? (a) : (b))
 
@@ -20,8 +34,6 @@ Node* createNode() {
 }
 
 BinaryTree* createTree() {
-    Node* root;
-    Node* NIL;
     BinaryTree* tree = malloc(sizeof(BinaryTree));
     tree->root = NULL;
     tree->NIL = NULL;
@@ -46,29 +58,29 @@ int prtIndexAux(Node* tnode, int idx) {
 
 }
 
-void pTreeAux(Node* node, int* idxs, int col, int plus, int height) {
+void pTreeAux(Node* node, int* idxs, int col, int plus) {
     if (!node) return;
     int tmp = 0;
     if (plus) idxs[col] = 1;
     for (tmp = 0; tmp < col; tmp++)
-        printf("%lc ", *(idxs + tmp)? 9474 : ' ');
+        printf("%lc ", *(idxs + tmp)? C1 : ' ');
     if (node->left && node->right) {
-        printf("%lc%lc%lc%lc %s [%d]", plus? 9500 : 9492, 9472, 9516, 9472, node->word, node->documentIds->size);
+        printf("%lc%lc%lc%lc %s [%d]", plus? C2 : C3, C4, C5, C4, node->word, node->documentIds->size);
         if (node->isRed) printf(", RED node");
         printf("\n");
-        pTreeAux(node->left, idxs, col+1, 1, height);
-        pTreeAux(node->right, idxs, col+1, 0, height);
+        pTreeAux(node->left, idxs, col+1, 1);
+        pTreeAux(node->right, idxs, col+1, 0);
     } else if (node->left || node->right) {
-        printf("%lc%lc%lc%lc %s [%d]", plus? 9500 : 9492, 9472, 9516, 9472, node->word, node->documentIds->size);
+        printf("%lc%lc%lc%lc %s [%d]", plus? C2 : C3, C4, C5, C4, node->word, node->documentIds->size);
         if (node->isRed) printf(", RED node");
         printf("\n");
-        pTreeAux((node->left)? node->left : node->right, idxs, col+1, 0, height);
+        pTreeAux((node->left)? node->left : node->right, idxs, col+1, 0);
     } else {
-        printf("%lc%lc%lc%lc %s [%d]", plus? 9500 : 9492, 9472, 9472, 9472, node->word, node->documentIds->size);
+        printf("%lc%lc%lc%lc %s [%d]", plus? C2 : C3, C4, C4, C4, node->word, node->documentIds->size);
         if (node->isRed) printf(", RED node");
         printf("\n");
     }
-    if (idxs[height]) idxs[height] = 0;
+    if (idxs[col]) idxs[col] = 0;
     idxs[col] = 0;
     return;
 }
@@ -81,14 +93,15 @@ int calculateHeight(Node* node, Node* NIL) {
 }
 
 void printTree(BinaryTree* tree) {
-    setlocale(LC_CTYPE, "");
-    // int *idxs = calloc(tree->root->height, 4);
-
+    if (tree == NULL || tree->root == NULL) return;
+    #ifndef _WIN32
+        setlocale(LC_CTYPE, "");
+    #endif
     int height = calculateHeight(tree->root, tree->NIL);
+    // setlocale(LC_CTYPE, "");
     int *idxs = malloc(height*4);
-
     for(int tmp = 0; tmp < height; tmp++) *(idxs + tmp) = 0;
-    pTreeAux(tree->root, idxs, 0, 0, height);
+    pTreeAux(tree->root, idxs, 0, 0);
     free(idxs);
     return;
 }
@@ -113,21 +126,32 @@ int getMaxID(Node* node) {
     return currID;
 }
 
-void svTreeAux(Node* node, int maxID, FILE* file) {
+void svTreeAux(Node* node, int maxID, FILE* file, int isRBT) {
     if (node == NULL) return;
-    int color1 = 225*(((float) maxID - node->documentIds->size)/maxID) + 30;
-    int color2 = 111*(((float) maxID - node->documentIds->size)/maxID) + 144;
+    int color1 = 0;
+    int color2 = 0;
+    int color3 = 0;
+    if (isRBT && node->isRed || !isRBT) {
+        color1 = 225*(((float) maxID - node->documentIds->size)/maxID) + 30;
+        color2 = 111*(((float) maxID - node->documentIds->size)/maxID) + 144;
+        color3 = 255;
+    }
+    else {
+        color1 = 218*(((float) maxID - node->documentIds->size)/maxID) + 37;
+        color2 = 137*(((float) maxID - node->documentIds->size)/maxID) + 118;
+        color3 = 138*(((float) maxID - node->documentIds->size)/maxID) + 117;
+    }
     fprintf(file, "\t\"%s\" [fillcolor = \"#%02x%02x%02x\", fontcolor = \"%s\", color = \"%s\"]\n\t\"%s\"",
-        node->word, color1,color2,255,"black",
+        node->word, color1,color2,color3,"black",
         "black",node->word);
     if (node->right && node->left) {
         fprintf(file, "-> {\"%s\" \"%s\"}\n", node->right->word, node->left->word);
-        svTreeAux(node->left, maxID, file);
-        svTreeAux(node->right, maxID, file);
+        svTreeAux(node->left, maxID, file, isRBT);
+        svTreeAux(node->right, maxID, file, isRBT);
     }
     else if (node->left && !node->right || !node->left && node->right ) {
         fprintf(file, "-> \"%s\"\n", node->right ? node->right->word : node->left->word);
-        svTreeAux(node->right ? node->right : node->left, maxID, file);
+        svTreeAux(node->right ? node->right : node->left, maxID, file, isRBT);
     }
     else fprintf(file, "\n");
 
@@ -141,7 +165,7 @@ void saveTree(BinaryTree* tree) {
     fprintf(file, "digraph {\n\tbgcolor=\"navajowhite\"\n\tnode [style=\"filled\", shape=\"component\"]\n");
 
     int maxID = getMaxID(tree->root);
-    svTreeAux(tree->root, maxID, file);
+    svTreeAux(tree->root, maxID, file, tree->NIL ? 1 : 0);
 
     fprintf(file, "}\n");
     fclose(file);
