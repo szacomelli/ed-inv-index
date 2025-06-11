@@ -231,7 +231,6 @@ struct SearchResult searchAVL(BinaryTree* tree, const string word) {
     while (current != NULL) {
         result.numComparisons++;
         int cmp = strcmp(word, current->word);
-        printf("Comparing '%s' with '%s': %d\n", word, current->word, cmp);  // DEBUG
         if (cmp == 0) {
             // Word found
             result.found = 1;
