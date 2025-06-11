@@ -22,16 +22,13 @@ Node* createNode(const string word, int documentId) {
         exit(1);
     }
 
-    // Copy the word into a new allocated string
     string wordCopy = malloc(strSize(word) + 1);
     strCopy(word, wordCopy);
     node->word = wordCopy;
 
-    // Create the list of document IDs and insert the first one
     node->documentIds = createList("int");
     insertValue(node->documentIds, &documentId);
 
-    // Initialize AVL node metadata
     node->parent = NULL;
     node->left = NULL;
     node->right = NULL;
@@ -65,7 +62,7 @@ Node* rotateRight(Node* y) {
     Node* x = y->left;
     Node* T2 = x->right;
 
-    // Perform rotation
+    // rotation
     x->right = y;
     y->left = T2;
 
@@ -74,11 +71,10 @@ Node* rotateRight(Node* y) {
     x->parent = y->parent;
     y->parent = x;
 
-    // Update heights
     updateHeight(y);
     updateHeight(x);
 
-    return x; // new root after rotation
+    return x; // new  "root" after rotation
 }
 
 // Left rotation
@@ -86,7 +82,7 @@ Node* rotateLeft(Node* x) {
     Node* y = x->right;
     Node* T2 = y->left;
 
-    // Perform rotation
+    // rotation
     y->left = x;
     x->right = T2;
 
@@ -95,21 +91,17 @@ Node* rotateLeft(Node* x) {
     y->parent = x->parent;
     x->parent = y;
 
-    // Update heights
     updateHeight(x);
     updateHeight(y);
 
-    return y; // new root after rotation
+    return y; // new "root" after rotation
 }
 
-// Rebalance function - returns the new root of the subtree after balancing
+// Rebalance function - returns the new "root" of the subtree after balancing
 Node* rebalance(Node* node) {
     if (node == NULL) return node;
 
-    // Update height of this ancestor node
     updateHeight(node);
-
-    // Get balance factor
     int balance = getBalanceFactor(node);
 
     // Left Left Case
@@ -134,7 +126,6 @@ Node* rebalance(Node* node) {
         return rotateLeft(node);
     }
 
-    // Already balanced
     return node;
 }
 
@@ -145,7 +136,7 @@ InsertResult insert(BinaryTree* tree, const string word, int documentId) {
     clock_t start = clock();
 
     if (!tree || !word) {
-        return result;  // invalid input
+        return result;
     }
 
     if (tree->root == NULL) {
@@ -164,7 +155,7 @@ InsertResult insert(BinaryTree* tree, const string word, int documentId) {
     Node* parent = NULL;
     int cmp = 0;
 
-    // Traverse the tree to find the insert position or duplicate
+    // Search the tree to find the insert position or duplicate
     while (current != NULL) {
         parent = current;
         cmp = strcmp(word, current->word);
@@ -187,7 +178,6 @@ InsertResult insert(BinaryTree* tree, const string word, int documentId) {
         }
     }
 
-    // Create new node and link it to the parent
     Node* newNode = createNode(word, documentId);
     if (newNode == NULL) {
         return result;
