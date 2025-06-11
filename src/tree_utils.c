@@ -126,21 +126,32 @@ int getMaxID(Node* node) {
     return currID;
 }
 
-void svTreeAux(Node* node, int maxID, FILE* file) {
+void svTreeAux(Node* node, int maxID, FILE* file, int isRBT) {
     if (node == NULL) return;
-    int color1 = 225*(((float) maxID - node->documentIds->size)/maxID) + 30;
-    int color2 = 111*(((float) maxID - node->documentIds->size)/maxID) + 144;
+    int color1 = 0;
+    int color2 = 0;
+    int color3 = 0;
+    if (isRBT && node->isRed || !isRBT) {
+        color1 = 225*(((float) maxID - node->documentIds->size)/maxID) + 30;
+        color2 = 111*(((float) maxID - node->documentIds->size)/maxID) + 144;
+        color3 = 255;
+    }
+    else {
+        color1 = 218*(((float) maxID - node->documentIds->size)/maxID) + 37;
+        color2 = 137*(((float) maxID - node->documentIds->size)/maxID) + 118;
+        color3 = 138*(((float) maxID - node->documentIds->size)/maxID) + 117;
+    }
     fprintf(file, "\t\"%s\" [fillcolor = \"#%02x%02x%02x\", fontcolor = \"%s\", color = \"%s\"]\n\t\"%s\"",
-        node->word, color1,color2,255,"black",
+        node->word, color1,color2,color3,"black",
         "black",node->word);
     if (node->right && node->left) {
         fprintf(file, "-> {\"%s\" \"%s\"}\n", node->right->word, node->left->word);
-        svTreeAux(node->left, maxID, file);
-        svTreeAux(node->right, maxID, file);
+        svTreeAux(node->left, maxID, file, isRBT);
+        svTreeAux(node->right, maxID, file, isRBT);
     }
     else if (node->left && !node->right || !node->left && node->right ) {
         fprintf(file, "-> \"%s\"\n", node->right ? node->right->word : node->left->word);
-        svTreeAux(node->right ? node->right : node->left, maxID, file);
+        svTreeAux(node->right ? node->right : node->left, maxID, file, isRBT);
     }
     else fprintf(file, "\n");
 
@@ -154,7 +165,7 @@ void saveTree(BinaryTree* tree) {
     fprintf(file, "digraph {\n\tbgcolor=\"navajowhite\"\n\tnode [style=\"filled\", shape=\"component\"]\n");
 
     int maxID = getMaxID(tree->root);
-    svTreeAux(tree->root, maxID, file);
+    svTreeAux(tree->root, maxID, file, tree->NIL ? 1 : 0);
 
     fprintf(file, "}\n");
     fclose(file);
