@@ -40,7 +40,7 @@ BinaryTree* buildTree(string** docInfo, string mode) {
     printf("All %d documents were scanned\n", len);
     if (strcmp(mode, "stats") == 0) fprintf( insertCSV,
         /* "Total insertion time: %lf\nMean insertion time: %lf\nNumber of words: %d\nTree build time:%lf\n", */
-        "%lf,%lf,%d,%lf;",
+        "%lf,%lf,%d,%lf,0;",
         totalInsTime, meanInsTime, count, totalTime
     );
     fclose(insertCSV);
@@ -51,6 +51,44 @@ BinaryTree* buildTree(string** docInfo, string mode) {
 
 
     return tree;
+}
+
+void getSearchInfo(string** docInfo, BinaryTree* tree) {
+  FILE *searchCSV = fopen("./stats/search.csv", "w");
+  clock_t start = clock();
+  // for the stats
+
+  float totalSTime = 0;
+  float meanSTime = 0;
+  int count = 0;
+  int len = 0;
+  int maxHeight = 0;
+  while (docInfo[len]) len++; // gets docInfo length
+  for (int i = 0; i < len; i++) {
+      if (i % 1000 == 0 && i != 0) printf("Documents scanned: %d\n", i);
+      int docLen = 0;
+      while (docInfo[i][docLen]) docLen++; // gets docInfo[i] length
+      for (int j = 0; j < docLen; j++) {
+          struct SearchResult result = searchAVL(tree, *(*(docInfo + i) + j));
+          // more stat gathering
+          fprintf(searchCSV, "%s,%d,%lf,%d,%d;\n",
+                  *(*(docInfo + i) + j), result.found, result.executionTime,
+                  result.numComparisons, result.documentIds->size);
+          totalSTime += result.executionTime;
+          maxHeight = maxHeight < result.numComparisons ? result.numComparisons : maxHeight;
+          count++;
+      }
+  }
+  meanSTime = ((float)totalSTime/count);
+  clock_t end = clock();
+  clock_t totalTime = ((double)(end - start))/CLOCKS_PER_SEC;
+  fprintf( searchCSV,
+        /* "Total insertion time: %lf\nMean insertion time: %lf\nNumber of words: %d\nTree build time:%lf\n", */
+        "%lf,%lf,%d,%lf,0;",
+        totalSTime, meanSTime, count, totalTime
+    );
+  fclose(searchCSV);
+  return;
 }
 
 int main(int argc, char *argv[]) {
@@ -75,38 +113,40 @@ int main(int argc, char *argv[]) {
 
     BinaryTree* tree = buildTree(docInfo, argv[1]);
 
+    if (strcmp(argv[1], "stats") == 0) getSearchInfo(docInfo, tree);
+    else {
+      char prConf = '0';
+      printf("Print tree? (y/n) ");
+      scanf(" %c", &prConf);
+      if (prConf == 'y') printTree(tree);
 
-    char prConf = '0';
-    printf("Print tree? (y/n) ");
-    scanf(" %c", &prConf);
-    if (prConf == 'y') printTree(tree);
-
-    char word[100];
-    while(strcmp(word, "#stop") != 0) {
+      char word[100];
+      while(strcmp(word, "#stop") != 0) {
         printf("Write the word to be searched (#stop to stop execution): ");
         scanf("%s", word);
         printf("%s\n", word);
         printf("\n");
         if (strcmp(word, "#stop") != 0) {
-            struct SearchResult result = searchAVL(tree, word);
-            if (result.found) {
-                printf("Word found at height %d\n", result.numComparisons);
+          struct SearchResult result = searchAVL(tree, word);
+          if (result.found) {
+            printf("Word found at height %d\n", result.numComparisons);
 
-                if (strcmp(argv[1], "stats") == 0) {
-                    printf("Execution time: %lf\nNumber of comparison: %d\n", result.executionTime, result.numComparisons);
-                }
-
-
-                printf("Print documentIds? (y/n):");
-                char conf = '0';
-                scanf(" %c", &conf);
-                printf("\n");
-
-                if (conf == 'y') printList(result.documentIds);
+            if (strcmp(argv[1], "stats") == 0) {
+              printf("Execution time: %lf\nNumber of comparison: %d\n", result.executionTime, result.numComparisons);
             }
-            else printf("Word not found...\n");
+
+
+            printf("Print documentIds? (y/n):");
+            char conf = '0';
+            scanf(" %c", &conf);
+            printf("\n");
+
+            if (conf == 'y') printList(result.documentIds);
+          }
+          else printf("Word not found...\n");
         }
 
+      }
     }
 
     // freeing everything
