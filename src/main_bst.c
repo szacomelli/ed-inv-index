@@ -7,7 +7,7 @@
 BinaryTree* buildTree(string** docInfo, string mode) {
     clock_t start = clock();
     // for the stats
-    BinaryTree* tree = create();
+    BinaryTree* tree = createBST();
     float totalInsTime = 0;
     float meanInsTime = 0;
     int count = 0;
@@ -19,7 +19,7 @@ BinaryTree* buildTree(string** docInfo, string mode) {
         int docLen = 0;
         while (docInfo[i][docLen]) docLen++; // gets docInfo[i] length
         for (int j = 0; j < docLen; j++) {
-            struct InsertResult result = insert(tree, *(*(docInfo + i) + j), i);
+            struct InsertResult result = insertBST(tree, *(*(docInfo + i) + j), i);
             // more stat gathering
             totalInsTime += result.executionTime;
             maxHeight = maxHeight < result.numComparisons ? result.numComparisons : maxHeight;
@@ -59,7 +59,7 @@ int main(int argc, char *argv[]) {
     for (int i=0; i < strSize(argv[2]); i++)
     if (argv[2][i] < 48 || argv[2][i] > 57) {printf("WRONG USAGE: first argument must be a number\n"); return 1;}
 
-    int docNumber = atoi(argv[2]) > -1 ? (atoi(argv[2]) <= 10102 ? atoi(argv[2]) : 10102) : 0;
+    int docNumber = atoi(argv[2]) > -1 ? atoi(argv[2]) : 0;
 
     string** docInfo = readStrs(argv[3], 0, docNumber);
 
@@ -80,9 +80,9 @@ int main(int argc, char *argv[]) {
         printf("%s\n", word);
         printf("\n");
         if (strcmp(word, "#stop") != 0) {
-            struct SearchResult result = search(tree, word);
+            struct SearchResult result = searchBST(tree, word);
             if (result.found) {
-                printf("Word found at height %d\n", result.numComparisons);
+                printf("Word found at depth %d\n", result.numComparisons);
 
                 if (strcmp(argv[1], "stats") == 0) {
                     printf("Execution time: %lf\nNumber of comparison: %d\n", result.executionTime, result.numComparisons);
@@ -102,7 +102,7 @@ int main(int argc, char *argv[]) {
     }
 
     // freeing everything
-    destroy(tree);
+    destroyBST(tree);
 
     freeDocs(docInfo);
 }
