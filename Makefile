@@ -1,10 +1,10 @@
 all: main_bst main_avl test_bst test_avl
 
 main_rbt: src/main_rbt.c src/rbt.o src/data.o src/lkdlist.o src/str.o src/tree_utils.o
-	gcc src/rbt.o src/data.o src/lkdlist.o src/str.o src/tree_utils.o src/main_bst.c -o main_rbt
+	gcc src/rbt.o src/data.o src/lkdlist.o src/str.o src/tree_utils.o src/main_rbt.c -o main_rbt
 
 main_avl: src/main_avl.c src/avl.o src/data.o src/lkdlist.o src/str.o src/tree_utils.o
-	gcc src/avl.o src/data.o src/lkdlist.o src/str.o src/tree_utils.o src/main_bst.c -o main_avl
+	gcc src/avl.o src/data.o src/lkdlist.o src/str.o src/tree_utils.o src/main_avl.c -o main_avl
 
 main_bst: src/main_bst.c src/bst.o src/data.o src/lkdlist.o src/str.o src/tree_utils.o
 	gcc src/bst.o src/data.o src/lkdlist.o src/str.o src/tree_utils.o src/main_bst.c -o main_bst

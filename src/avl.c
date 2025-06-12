@@ -1,9 +1,6 @@
-/* #include <stdio.h> */
-/* #include <stdlib.h> */
- #include <time.h>
+#include <time.h>
 #include "avl.h"
-//#include "tree_utils.h"
-// Creates and initializes an empty AVL tree
+
 BinaryTree* createAVL() {
     BinaryTree* tree = (BinaryTree*) malloc(sizeof(BinaryTree));
     if (!tree) {
@@ -14,7 +11,6 @@ BinaryTree* createAVL() {
     return tree;
 }
 
-// Creates a new node with the given word and document ID
 Node* createNodeAVL(const string word, int documentId) {
     Node* node = (Node*) malloc(sizeof(Node));
     if (!node) {
@@ -200,18 +196,11 @@ struct InsertResult insertAVL(BinaryTree* tree, const string word, int documentI
 
     // Rebalance tree starting from the new node's parent
     Node* rebNode = newNode;
-    rebNode = rebalance(rebNode);
-    if (rebNode->left == tree->root || rebNode->right == tree->root) tree->root = rebNode;
-    rebNode = rebNode->parent;
-    rebNode = rebalance(rebNode);
-    if (rebNode->left == tree->root || rebNode->right == tree->root) tree->root = rebNode;
-    rebNode = rebNode->parent;
 
     while (rebNode != NULL) {
-        updateHeight(rebNode);
+        rebNode = rebalance(rebNode);
+        if (rebNode->left == tree->root || rebNode->right == tree->root) tree->root = rebNode;
         rebNode = rebNode->parent;
-        /* rebNode = rebalance(rebNode); */
-        //printf("%s\n", word);
     }
 
     result.status = 1;
@@ -219,7 +208,6 @@ struct InsertResult insertAVL(BinaryTree* tree, const string word, int documentI
     return result;
 }
 
-// Searches for a word in the AVL tree and returns the SearchResult struct.
 struct SearchResult searchAVL(BinaryTree* tree, const string word) {
     struct SearchResult result;
     result.found = 0;
