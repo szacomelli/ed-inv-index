@@ -200,12 +200,18 @@ struct InsertResult insertAVL(BinaryTree* tree, const string word, int documentI
 
     // Rebalance tree starting from the new node's parent
     Node* rebNode = newNode;
+    rebNode = rebalance(rebNode);
+    if (rebNode->left == tree->root || rebNode->right == tree->root) tree->root = rebNode;
+    rebNode = rebNode->parent;
+    rebNode = rebalance(rebNode);
+    if (rebNode->left == tree->root || rebNode->right == tree->root) tree->root = rebNode;
+    rebNode = rebNode->parent;
+
     while (rebNode != NULL) {
-
-        rebNode = rebalance(rebNode);
-        if (rebNode->left == tree->root || rebNode->right == tree->root) tree->root = rebNode;
+        updateHeight(rebNode);
         rebNode = rebNode->parent;
-
+        /* rebNode = rebalance(rebNode); */
+        //printf("%s\n", word);
     }
 
     result.status = 1;
