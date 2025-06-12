@@ -44,21 +44,21 @@ void test_insert() {
     struct InsertResult res1 = insertAVL(tree, "apple", 1);
     if (res1.status != 1) {
         printf("Test failed: insert 'apple' first time\n\n");
-        free(tree);
+        destroyAVL(tree);
         return;
     }
 
     struct InsertResult res2 = insertAVL(tree, "banana", 2);
     if (res2.status != 1) {
         printf("Test failed: insert 'banana' first time\n\n");
-        free(tree);
+        destroyAVL(tree);
         return;
     }
 
     struct InsertResult res3 = insertAVL(tree, "apple", 3); // duplicate word, new docId
     if (res3.status != 2) {
         printf("Test failed: insert duplicate 'apple'\n\n");
-        free(tree);
+        destroyAVL(tree);
         return;
     }
 
@@ -71,18 +71,28 @@ void test_insert() {
 
     if (current == NULL) {
         printf("Test failed: 'apple' node not found\n\n");
-        free(tree);
+        destroyAVL(tree);
         return;
     }
 
     if (lookupValue(current->documentIds, &(int){3}) == -1) {
         printf("Test failed: documentId 3 not found for 'apple'\n\n");
-        free(tree);
+        destroyAVL(tree);
         return;
     }
 
     printf("Insert test passed.\n\n");
-    free(tree);
+
+    printf("New insert test for duplicate 'banana'\n");
+    struct InsertResult res4 = insertAVL(tree, "banana", 2); // duplicate word, same docId
+    if (res4.status != 2) {
+        printf("Test failed: insert duplicate 'banana' with same docId\n\n");
+        destroyAVL(tree);
+        return;
+    }
+
+    printf("Insert test passed.\n\n");
+    destroyAVL(tree);
 }
 
 
@@ -123,6 +133,14 @@ void test_search() {
         printf("Search test passed: 'durian' correctly not found.\n");
     } else {
         printf("Search test failed: 'durian' should not be found.\n");
+    }
+
+    // Search for "apple" (likely to be the root)
+    struct SearchResult res3 = searchAVL(tree, "apple");
+    if (res3.found) {
+        printf("Search test passed: 'apple' found.\n");
+    } else {
+        printf("Search test failed: 'apple' should be found.\n");
     }
 
     // Free the tree after testing
