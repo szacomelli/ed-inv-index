@@ -65,7 +65,7 @@ void getSearchInfo(string** docInfo, BinaryTree* tree) {
   int maxHeight = 0;
   while (docInfo[len]) len++; // gets docInfo length
   for (int i = 0; i < len; i++) {
-      if (i % 1000 == 0 && i != 0) printf("Documents scanned: %d\n", i);
+      if (i % 1000 == 0 && i != 0) printf("Documents searched: %d\n", i);
       int docLen = 0;
       while (docInfo[i][docLen]) docLen++; // gets docInfo[i] length
       for (int j = 0; j < docLen; j++) {
