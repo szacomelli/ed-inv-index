@@ -1,3 +1,5 @@
+#ifndef TREE_UTILS_H
+#define TREE_UTILS_H
 #include "str.h"
 #include "lkdlist.h"
 
@@ -42,3 +44,5 @@ void printIndex(BinaryTree* tree);
 void saveTree(BinaryTree* tree);
 
 void printTree(BinaryTree* tree);
+
+#endif

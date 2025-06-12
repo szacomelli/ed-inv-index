@@ -1,8 +1,6 @@
-/* #include <stdio.h> */
-/* #include <stdlib.h> */
- #include <time.h>
+#include <time.h>
 #include "avl.h"
-//#include "tree_utils.h"
+
 // Creates and initializes an empty AVL tree
 BinaryTree* createAVL() {
     BinaryTree* tree = (BinaryTree*) malloc(sizeof(BinaryTree));
@@ -200,18 +198,11 @@ struct InsertResult insertAVL(BinaryTree* tree, const string word, int documentI
 
     // Rebalance tree starting from the new node's parent
     Node* rebNode = newNode;
-    rebNode = rebalance(rebNode);
-    if (rebNode->left == tree->root || rebNode->right == tree->root) tree->root = rebNode;
-    rebNode = rebNode->parent;
-    rebNode = rebalance(rebNode);
-    if (rebNode->left == tree->root || rebNode->right == tree->root) tree->root = rebNode;
-    rebNode = rebNode->parent;
 
     while (rebNode != NULL) {
-        updateHeight(rebNode);
+        rebNode = rebalance(rebNode);
+        if (rebNode->left == tree->root || rebNode->right == tree->root) tree->root = rebNode;
         rebNode = rebNode->parent;
-        /* rebNode = rebalance(rebNode); */
-        //printf("%s\n", word);
     }
 
     result.status = 1;

@@ -152,7 +152,7 @@ void saveTree(BinaryTree* tree) {
     fprintf(file, "}\n");
     fclose(file);
 
-    system("mkidir graph >/dev/null 2>&1");
+    system("mkdir graph >/dev/null 2>&1");
     system("dot -Tsvg ./test.txt > ./graph/output.svg ");
     return;
 }
