@@ -134,18 +134,26 @@ void svTreeAux(Node* node, int maxID, FILE* file, int isRBT) {
     int color1 = 0;
     int color2 = 0;
     int color3 = 0;
+    string fontcolor = "black";
     if (isRBT && node->isRed || !isRBT) {
-        color1 = 225*(((float) maxID - node->documentIds->size)/maxID) + 30;
-        color2 = 111*(((float) maxID - node->documentIds->size)/maxID) + 144;
-        color3 = 255;
+        color1 = 46*(((float) maxID - node->documentIds->size)/maxID) + 209;
+        color2 = 190*(((float) maxID - node->documentIds->size)/maxID) + 65;
+        color3 = 219*(((float) maxID - node->documentIds->size)/maxID) + 36;
     }
+    /* else { */
+    /*     color1 = 35*(((float) maxID - node->documentIds->size)/maxID) + 220; */
+    /*     color2 = 140*(((float) maxID - node->documentIds->size)/maxID) + 115; */
+    /*     color3 = 227*(((float) maxID - node->documentIds->size)/maxID) + 28; */
+    /*     fontcolor = "black"; */
+    /* } */
     else {
-        color1 = 218*(((float) maxID - node->documentIds->size)/maxID) + 37;
-        color2 = 137*(((float) maxID - node->documentIds->size)/maxID) + 118;
-        color3 = 138*(((float) maxID - node->documentIds->size)/maxID) + 117;
+        color1 = -209*(((float) maxID - node->documentIds->size)/maxID) + 209;
+        color2 = -125*(((float) maxID - node->documentIds->size)/maxID) + 125;
+        color3 = -36*(((float) maxID - node->documentIds->size)/maxID) + 36;
+        fontcolor = "white";
     }
     fprintf(file, "\t\"%s\" [fillcolor = \"#%02x%02x%02x\", fontcolor = \"%s\", color = \"%s\"]\n\t\"%s\"",
-        node->word, color1,color2,color3,"black",
+        node->word, color1,color2,color3,fontcolor,
         "black",node->word);
     if (node->right && node->left) {
         fprintf(file, "-> {\"%s\" \"%s\"}\n", node->right->word, node->left->word);
@@ -165,7 +173,7 @@ void saveTree(BinaryTree* tree) {
     FILE* file = fopen("test.txt", "w");
     if (file == NULL) return;
 
-    fprintf(file, "digraph {\n\tbgcolor=\"navajowhite\"\n\tnode [style=\"filled\", shape=\"component\"]\n");
+    fprintf(file, "digraph {\n\tbgcolor=\"moccasin\"\n\tnode [style=\"filled\", shape=\"component\"]\n");
 
     int maxID = getMaxID(tree->root);
     svTreeAux(tree->root, maxID, file, tree->NIL ? 1 : 0);

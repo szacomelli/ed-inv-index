@@ -1,4 +1,9 @@
 a.out
+
+
 main_avl.exe
 src/avl.o
 stats/inserts.csv
+
+
+testes*

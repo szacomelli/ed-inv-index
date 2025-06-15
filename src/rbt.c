@@ -13,6 +13,7 @@ BinaryTree* createRBT() {
   return tree;  
 }
 
+// for the cases where inserting node breaks the balance, we need to "rotate" branches
 void rotate(Node* node, int isRight) {
   if (isRight) {
     // saves the branches that will be implanted somewhere else
@@ -106,7 +107,7 @@ struct InsertResult insertRBT(BinaryTree* tree, string word, int docID) {
   clock_t startTime = clock();
 
 
-  if (!(tree->root)) {
+  if (!(tree->root)) { // when the tree is still empty
     Node* newRoot = createNode();
     newRoot->word = (string)malloc( strSize(word) + 1);
     strCopy(word, newRoot->word);
@@ -124,7 +125,7 @@ struct InsertResult insertRBT(BinaryTree* tree, string word, int docID) {
     Node* last = NULL;
     int numComp = 0;
     int found = 0;
-    
+    // searching for duplicates
     while (iterator != tree->NIL) {
       numComp++;
       last = iterator;
@@ -140,9 +141,9 @@ struct InsertResult insertRBT(BinaryTree* tree, string word, int docID) {
       clock_t totalTime = (double) (clock() - startTime)/CLOCKS_PER_SEC;
       result.executionTime = totalTime;
       result.numComparisons = numComp;
-      return result;
+      return result; // will return if the duplicate word is found
     }
-
+    // if not, will insert a new node
     Node* newNode = createNode();
     newNode->word = (string)malloc( strSize(word) + 1);
     strCopy(word, newNode->word);
@@ -155,7 +156,8 @@ struct InsertResult insertRBT(BinaryTree* tree, string word, int docID) {
     else last->right = newNode;
     newNode->parent = last;
     newNode->height = calculateHeight(tree->root, tree->NIL);
-    
+
+    // here, it rebalances the tree, accordingly with the current case
     if (last->isRed) {
       int nCase = getCase(newNode);
       if (nCase == 1) firstHelper(newNode, tree->NIL);
@@ -185,6 +187,7 @@ struct SearchResult searchRBT(BinaryTree* tree, string word) {
   result.documentIds = NULL;
   int numComp = 0;
   Node* iterator = tree->root;
+  // works the same as in the insert function
   while (iterator != tree->NIL) {
     numComp++;
     if (strcmp(word, iterator->word) < 0) iterator = iterator->left;
