@@ -88,7 +88,7 @@ void thirdHelper(Node* node) {
 void secondHelper(Node* node) {
   if (node->parent->parent->left == node->parent) {
     rotate(node->parent, 0); 
-    thirdHelper(node->right);
+    thirdHelper(node->left);
   }
   else {
     rotate(node->parent, 1);
