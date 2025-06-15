@@ -85,6 +85,7 @@ void pTreeAux(Node* node, int* idxs, int col, int plus) {
     return;
 }
 
+<<<<<<< HEAD
 int calculateHeight(Node* node, Node* NIL) {
     if (node == NIL) return 0;
     int left = (calculateHeight(node->left, NIL) + 1);
@@ -97,10 +98,12 @@ void printTree(BinaryTree* tree) {
     #ifndef _WIN32
         setlocale(LC_CTYPE, "");
     #endif
+
     int height = calculateHeight(tree->root, tree->NIL);
     // setlocale(LC_CTYPE, "");
     int *idxs = malloc(height*4);
     for(int tmp = 0; tmp < height; tmp++) *(idxs + tmp) = 0;
+
     pTreeAux(tree->root, idxs, 0, 0);
     free(idxs);
     return;
@@ -170,7 +173,7 @@ void saveTree(BinaryTree* tree) {
     fprintf(file, "}\n");
     fclose(file);
 
-    system("mkidir graph >/dev/null 2>&1");
+    system("mkdir graph >/dev/null 2>&1");
     system("dot -Tsvg ./test.txt > ./graph/output.svg ");
     return;
 }
