@@ -65,6 +65,7 @@ struct InsertResult insertBST(BinaryTree *tree, string word, int docId)
     struct InsertResult result;
     result.numComparisons = 0;
     result.executionTime = 0.0;
+    result.status = 0;
 
     if (tree == NULL)
     {
@@ -84,6 +85,7 @@ struct InsertResult insertBST(BinaryTree *tree, string word, int docId)
         result.numComparisons = 0;
         clock_t end = clock();
         result.executionTime = ((double)(end - start)) / CLOCKS_PER_SEC;
+        result.status = 1;
         return result;
     }
 
@@ -94,6 +96,7 @@ struct InsertResult insertBST(BinaryTree *tree, string word, int docId)
 
     if (currNode) // If currNode isn't NULL (i.e. if word was founded and the pointer changed)
     {
+        result.status = 2;
         insertValue(currNode->documentIds, &docId);
     }
     else
@@ -113,6 +116,7 @@ struct InsertResult insertBST(BinaryTree *tree, string word, int docId)
 
         }
         updateHeight(tree->root, word);
+        result.status = 1;
     }
 
     clock_t end = clock();
