@@ -39,7 +39,7 @@ BinaryTree* buildTree(string** docInfo, string mode) {
             struct InsertResult result = insertAVL(tree, *(*(docInfo + i) + j), i);
             // more stat gathering
             if (strcmp(mode, "stats") == 0 )
-              fprintf(insertWordsCSV, "%s,%d,%lf,%d,%d;\n",
+              fprintf(insertWordsCSV, "%s,%d,%lf,%d,%d\n",
                       *(*(docInfo + i) + j), result.status, result.executionTime,
                       result.numComparisons, tree->root->height);
             totalInsTime += result.executionTime;
@@ -49,7 +49,7 @@ BinaryTree* buildTree(string** docInfo, string mode) {
 
         }
         docTimes[i] = totalInsTime - (i != 0 ? docTimes[i-1] : 0);
-        fprintf(insertDocCSV, "%d,%lf,%lf,%d,%d;",
+        fprintf(insertDocCSV, "%d,%lf,%lf,%d,%d\n",
                 i, docTimes[i], docTimes[i]/docLen, tree->root->height, docLen);
 
     }
@@ -110,7 +110,7 @@ void getSearchInfo(string** docInfo, BinaryTree* tree) {
           struct SearchResult result = searchAVL(tree, *(*(docInfo + i) + j));
 
           // more stat gathering
-          fprintf(searchWordCSV, "%s,%d,%lf,%d,%d;\n",
+          fprintf(searchWordCSV, "%s,%d,%lf,%d,%d\n",
                   *(*(docInfo + i) + j), result.found, result.executionTime,
                   result.numComparisons, result.documentIds->size);
           totalSTime += result.executionTime;
@@ -121,7 +121,7 @@ void getSearchInfo(string** docInfo, BinaryTree* tree) {
       }
       docTimes[i] = totalSTime - (i != 0 ? docTimes[i-1] : 0);
       docComp[i] = compCount - (i != 0 ? docComp[i-1] : 0);
-      fprintf(searchDocCSV, "%d,%lf,%lf,%d,%f,%d;",
+      fprintf(searchDocCSV, "%d,%lf,%lf,%d,%f,%d\n",
                 i, docTimes[i], docTimes[i]/docLen, docComp[i],(float)docComp[i]/docLen, docLen);
 
   }
@@ -131,7 +131,7 @@ void getSearchInfo(string** docInfo, BinaryTree* tree) {
   clock_t totalTime = ((double)(end - start))/CLOCKS_PER_SEC;
   fprintf( searchCSV,
         /* "Total insertion time: %lf\nMean insertion time: %lf\nNumber of words: %d\nTree build time:%lf\n", */
-        "%lf,%lf,%d,%lf,%d,%f;",
+        "%lf,%lf,%d,%lf,%d,%f",
         totalSTime, meanSTime, count, totalTime, compCount, compCountMean
     );
   fclose(searchCSV);
