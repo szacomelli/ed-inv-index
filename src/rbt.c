@@ -185,6 +185,10 @@ struct SearchResult searchRBT(BinaryTree* tree, string word) {
   struct SearchResult result;
   result.found = 0;
   result.documentIds = NULL;
+  result.executionTime = 0;
+  result.numComparisons = 0;
+  if (!tree || !word) return result;
+  result.documentIds = NULL;
   int numComp = 0;
   Node* iterator = tree->root;
   // works the same as in the insert function
