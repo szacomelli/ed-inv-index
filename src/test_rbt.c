@@ -45,14 +45,12 @@ int test_insertion(int* total) {
     BinaryTree* tree = createRBT();
     struct InsertResult results;
     results = insertRBT(NULL, "null", 0);
-    printTree(tree);
     printf("-Teste %2d: ", tests++);
     if (results.numComparisons) {
         errors++;
         printf("Error in \"insert()\": realizing comparison in NULL;\n");
     } else printf("Ok;\n");
     results = insertRBT(tree, "root", 0);
-    printTree(tree);
     printf("-Teste %2d: ", tests++);
     if (results.numComparisons > 1) {
         errors++;
@@ -64,7 +62,6 @@ int test_insertion(int* total) {
         errors++;
     } else printf("Ok;\n");
     results = insertRBT(tree, "left", 0);
-    printTree(tree);
     printf("-Teste %2d: ", tests++);
     if (results.numComparisons > 2){
         errors++;
@@ -76,7 +73,6 @@ int test_insertion(int* total) {
         errors++;
     } else printf("Ok;\n");
     results = insertRBT(tree, "right", 0);
-    printTree(tree);
     printf("-Teste %2d: ", tests++);
     if (results.numComparisons > 3){
         errors++;
@@ -93,7 +89,6 @@ int test_insertion(int* total) {
         errors++;
     } else printf("Ok;\n");
     results = insertRBT(tree, "tree", 0);
-    printTree(tree);
     printf("-Teste %2d: ", tests++);
     if (tree->root->right->isRed != 0) {
         printf("Error in \"insert()\": second layer must be black after new insertion;\n");
@@ -115,7 +110,6 @@ int test_insertion(int* total) {
         printf("Error in \"insert()\": realizing more comparisons than needed;\n");    
     } else printf("Ok;\n");
     results = insertRBT(tree, "right", 1);
-    printTree(tree);
     printf("-Teste %2d: ", tests++);
     if (results.numComparisons > 4){
         errors++;
@@ -169,7 +163,6 @@ int test_insertion(int* total) {
                 errors++;
             } else printf("Ok;\n");
             results = insertRBT(tree, "right", 0);
-            printTree(tree);
             printf("-Teste %2d: ", tests++);
             if (root->right->right->documentIds->size != 1) {
                 printf("Error in \"insert()\": size of documentIds different than expected;\n");
@@ -194,14 +187,12 @@ int test_insertion(int* total) {
         } else printf("Ok;\n");
     }
     insertRBT(tree, "salgado", 19);
-    printTree(tree);
     printf("-Teste %2d: ", tests++);
     if (strcmp(root->right->word, "salgado")) {
         printf("Error in \"insert()\": wrong word inserted on root->left;\n");
         errors++;
     } else printf("Ok;\n");
     insertRBT(tree, "soldado", 19);
-    printTree(tree);
     printf("-Teste %2d: ", tests++);
     if (strcmp(tree->root->word, "right")) {
         printf("Error in \"insert()\": wrong word on root after insert/rebalance;\n");
