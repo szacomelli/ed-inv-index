@@ -288,16 +288,16 @@ int test_destroy(int* total) {
 
 int main(void) {
     printf("\n -> Run the tests? (y/n)\n -->");
-    int errors = fgetchar();
-    int* tests;
-    *tests = 0;
+    int errors = getc(stdin);
+    fflush(stdin);
+    int tests = 0;
     if (errors == 121) {
         errors = 0;
-        errors += test_create(tests);
-        errors += test_insertion(tests);
-        errors += test_search(tests);
-        errors += test_destroy(tests);
+        errors += test_create(&tests);
+        errors += test_insertion(&tests);
+        errors += test_search(&tests);
+        errors += test_destroy(&tests);
     }
-    printf("\nFinalized tests execution. A total of %d errors were found in %d tests.\n", errors, *tests);
+    printf("\nFinalized tests execution. A total of %d errors were found in %d tests.\n", errors, tests);
     return 0;
 }

@@ -51,7 +51,7 @@ void rotate(Node* node, int isRight) {
 }
 
 // get the case the insert is currently stuck in
-// 1: red uncle. 2: black uncle, symmetric case. 3: black uncle, asymmetric case
+// 1: red uncle. 2: black uncle, asymmetric case. 3: black uncle, symmetric case
 int getCase(Node* node) {
   int parLeft = 0;
   Node* grand = node->parent->parent;
