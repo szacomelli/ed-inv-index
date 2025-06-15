@@ -43,12 +43,18 @@ int updateHeight(Node *node, string word) {
    if (!node) return -1;
    if (strcmp(word, node->word) < 0) {
       int leftHeight = updateHeight(node->left, word);
-      node->height = leftHeight > node->right->height ? leftHeight + 1 : node->right->height + 1;
+      int rightHeight = 0;
+      if (!node->right) rightHeight = -1;
+      else rightHeight = node->right->height;
+      node->height = leftHeight > rightHeight ? leftHeight + 1 : rightHeight + 1;
       return node->height;
    }
    else if (strcmp(word, node->word) > 0) {
       int rightHeight = updateHeight(node->right, word);
-      node->height = rightHeight > node->left->height ? rightHeight + 1 : node->left->height + 1;
+      int leftHeight = 0;
+      if (!node->left) leftHeight = -1;
+      else leftHeight = node->left->height;
+      node->height = rightHeight > leftHeight ? rightHeight + 1 : leftHeight + 1;
       return node->height;
    }
    else return node->height;

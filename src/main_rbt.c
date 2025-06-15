@@ -47,7 +47,7 @@ BinaryTree* buildTree(string** docInfo, string mode) {
     //uncomment this if you have Graphviz installed, use a Linux system and want to see the tree's graph
     //saveTree(tree);
     // if you use Windows, the graph will not be automatically generated; instead, you will need to run
-    // dot -Tsvg ./test.txt in the parent directory of src.
+    // dot -Tsvg ./test.txt in the parent directory of src (in Windows, the command name may differ).
 
 
     return tree;
