@@ -1,3 +1,5 @@
+#ifndef TREE_UTILS_H
+#define TREE_UTILS_H
 #include "str.h"
 #include "lkdlist.h"
 
@@ -25,6 +27,7 @@ BinaryTree* createTree();
 struct InsertResult {
     int numComparisons;
     double executionTime;
+    int status; // 0 if failed; 1 if success; 2 if duplicate;
     // <Possíveis outras variáveis>
 };
 
@@ -36,8 +39,12 @@ struct SearchResult {
     // <Possíveis outras variáveis>
 };
 
+int calculateHeight(Node* node, Node* NIL);
+
 void printIndex(BinaryTree* tree);
 
 void saveTree(BinaryTree* tree);
 
 void printTree(BinaryTree* tree);
+
+#endif

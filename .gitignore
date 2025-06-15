@@ -1,1 +1,8 @@
-a.out
+main_*
+test_*
+data/*.txt
+src/*.o
+graph/*
+stats/*
+~*
+testes*
