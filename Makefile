@@ -41,7 +41,7 @@ src/tree_utils.o: src/tree_utils.c
 
 ifeq ($(OS),Windows_NT)     # is Windows_NT on XP, 2000, 7, Vista, 10...
 clear:
-	del *.out *.exe *.o .\src\*.o .\src\*.exe .\src\*.out  .\graph\*
+	del *.out *.exe *.o .\src\*.o .\src\*.exe .\src\*.out  .\graph\* .\stats\*
 else
     detected_OS := $(shell uname)  # same as "uname -s"
 clear:
