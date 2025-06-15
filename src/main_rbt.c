@@ -7,16 +7,30 @@
 // building the tree
 BinaryTree* buildTree(string** docInfo, string mode) {
     system("mkdir stats");
-    FILE *insertCSV = fopen("./stats/inserts.csv", "w");
+    FILE *insertWordsCSV = fopen("./stats/rbt_word_inserts.csv", "w");
+    FILE *insertDocCSV = fopen("./stats/rbt_doc_inserts.csv", "w");
+    FILE *insertCSV = fopen("./stats/rbt_total_inserts.csv", "w");
     clock_t start = clock();
-    // for the stats
+
     BinaryTree* tree = createRBT();
+
+    // variables to get the time of inserts
     float totalInsTime = 0;
     float meanInsTime = 0;
     int count = 0;
+
+    int compCount = 0;
+    double compCountMean = 0;
+
+    // for the docInfo array lengths
     int len = 0;
     int maxHeight = 0;
     while (docInfo[len]) len++; // gets docInfo length
+
+    // for storaging stats for the entire documents
+    double docTimes[len];
+
+
     for (int i = 0; i < len; i++) {
         if (i % 1000 == 0 && i != 0) printf("Documents scanned: %d\n", i);
         int docLen = 0;
@@ -25,27 +39,38 @@ BinaryTree* buildTree(string** docInfo, string mode) {
             struct InsertResult result = insertRBT(tree, *(*(docInfo + i) + j), i);
             // more stat gathering
             if (strcmp(mode, "stats") == 0 )
-              fprintf(insertCSV, "%s,%d,%lf,%d,%d;\n",
+              fprintf(insertWordsCSV, "%s,%d,%lf,%d,%d;\n",
                       *(*(docInfo + i) + j), result.status, result.executionTime,
                       result.numComparisons, tree->root->height);
             totalInsTime += result.executionTime;
             maxHeight = maxHeight < result.numComparisons ? result.numComparisons : maxHeight;
             count++;
+            compCount = compCount + result.numComparisons;
 
         }
+        docTimes[i] = totalInsTime - (i != 0 ? docTimes[i-1] : 0);
+        fprintf(insertDocCSV, "%d,%lf,%lf,%d,%d;",
+                i, docTimes[i], docTimes[i]/docLen, tree->root->height, docLen);
+
     }
+    // computing more stats
     meanInsTime = ((float)totalInsTime)/count;
+    compCountMean = compCount/count;
     clock_t end = clock();
     clock_t totalTime = ((double)(end - start))/CLOCKS_PER_SEC;
     printf("All %d documents were scanned\n", len);
+
+    // writing in the docs
     if (strcmp(mode, "stats") == 0) fprintf( insertCSV,
         /* "Total insertion time: %lf\nMean insertion time: %lf\nNumber of words: %d\nTree build time:%lf\n", */
-        "%lf,%lf,%d,%lf,0;",
-        totalInsTime, meanInsTime, count, totalTime
+        "%lf,%lf,%d,%lf,%d,%f;",
+        totalInsTime, meanInsTime, count, totalTime, compCount, compCountMean
     );
     fclose(insertCSV);
+    fclose(insertDocCSV);
+    fclose(insertWordsCSV);
     //uncomment this if you have Graphviz installed, use a Linux system and want to see the tree's graph
-    //saveTree(tree);
+    saveTree(tree);
     // if you use Windows, the graph will not be automatically generated; instead, you will need to run
     // dot -Tsvg ./test.txt in the parent directory of src (in Windows, the command name may differ).
 
@@ -54,40 +79,62 @@ BinaryTree* buildTree(string** docInfo, string mode) {
 }
 
 void getSearchInfo(string** docInfo, BinaryTree* tree) {
-  FILE *searchCSV = fopen("./stats/search.csv", "w");
+  FILE *searchCSV = fopen("./stats/rbt_total_search.csv", "w");
+  FILE *searchWordCSV = fopen("./stats/rbt_word_search.csv", "w");
+  FILE *searchDocCSV = fopen("./stats/rbt_doc_search.csv", "w");
   clock_t start = clock();
-  // for the stats
 
+  // for the stats
   float totalSTime = 0;
   float meanSTime = 0;
   int count = 0;
+  int compCount = 0;
+  double compCountMean = 0;
+
+  // size os docInfo
   int len = 0;
+  double docTimes[len];
+  double docComp[len];
   int maxHeight = 0;
   while (docInfo[len]) len++; // gets docInfo length
   for (int i = 0; i < len; i++) {
       if (i % 1000 == 0 && i != 0) printf("Documents searched: %d\n", i);
+
+      // length of actual doc
       int docLen = 0;
       while (docInfo[i][docLen]) docLen++; // gets docInfo[i] length
+
       for (int j = 0; j < docLen; j++) {
           struct SearchResult result = searchRBT(tree, *(*(docInfo + i) + j));
+
           // more stat gathering
-          fprintf(searchCSV, "%s,%d,%lf,%d,%d;\n",
+          fprintf(searchWordCSV, "%s,%d,%lf,%d,%d;\n",
                   *(*(docInfo + i) + j), result.found, result.executionTime,
                   result.numComparisons, result.documentIds->size);
           totalSTime += result.executionTime;
           maxHeight = maxHeight < result.numComparisons ? result.numComparisons : maxHeight;
           count++;
+          compCount = compCount + result.numComparisons;
+
       }
+      docTimes[i] = totalSTime - (i != 0 ? docTimes[i-1] : 0);
+      docComp[i] = compCount - (i != 0 ? docComp[i-1] : 0);
+      fprintf(searchDocCSV, "%d,%lf,%lf,%d,%f,%d;",
+                i, docTimes[i], docTimes[i]/docLen, docComp[i],(float)docComp[i]/docLen, docLen);
+
   }
   meanSTime = ((float)totalSTime/count);
+  compCountMean = (float)compCount/count;
   clock_t end = clock();
   clock_t totalTime = ((double)(end - start))/CLOCKS_PER_SEC;
   fprintf( searchCSV,
         /* "Total insertion time: %lf\nMean insertion time: %lf\nNumber of words: %d\nTree build time:%lf\n", */
-        "%lf,%lf,%d,%lf,0;",
-        totalSTime, meanSTime, count, totalTime
+        "%lf,%lf,%d,%lf,%d,%f;",
+        totalSTime, meanSTime, count, totalTime, compCount, compCountMean
     );
   fclose(searchCSV);
+  fclose(searchWordCSV);
+  fclose(searchDocCSV);
   return;
 }
 
