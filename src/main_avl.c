@@ -70,7 +70,7 @@ BinaryTree* buildTree(string** docInfo, string mode) {
     fclose(insertDocCSV);
     fclose(insertWordsCSV);
     //uncomment this if you have Graphviz installed, use a Linux system and want to see the tree's graph
-    saveTree(tree);
+    //saveTree(tree);
     // if you use Windows, the graph will not be automatically generated; instead, you will need to run
     // dot -Tsvg ./test.txt in the parent directory of src (in Windows, the command name may differ).
 
@@ -93,10 +93,12 @@ void getSearchInfo(string** docInfo, BinaryTree* tree) {
 
   // size os docInfo
   int len = 0;
-  double docTimes[len];
-  double docComp[len];
+
   int maxHeight = 0;
   while (docInfo[len]) len++; // gets docInfo length
+  double docTimes[len];
+  double docComp[len];
+
   for (int i = 0; i < len; i++) {
       if (i % 1000 == 0 && i != 0) printf("Documents searched: %d\n", i);
 

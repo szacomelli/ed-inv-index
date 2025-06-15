@@ -63,14 +63,15 @@ BinaryTree* buildTree(string** docInfo, string mode) {
     // writing in the docs
     if (strcmp(mode, "stats") == 0) fprintf( insertCSV,
         /* "Total insertion time: %lf\nMean insertion time: %lf\nNumber of words: %d\nTree build time:%lf\n", */
-        "%lf,%lf,%d,%lf,%d,%f;",
+        "%lf,%lf,%d,%Lf,%d,%f;",
         totalInsTime, meanInsTime, count, totalTime, compCount, compCountMean
     );
+
     fclose(insertCSV);
     fclose(insertDocCSV);
     fclose(insertWordsCSV);
     //uncomment this if you have Graphviz installed, use a Linux system and want to see the tree's graph
-    saveTree(tree);
+    //saveTree(tree);
     // if you use Windows, the graph will not be automatically generated; instead, you will need to run
     // dot -Tsvg ./test.txt in the parent directory of src (in Windows, the command name may differ).
 
@@ -93,10 +94,11 @@ void getSearchInfo(string** docInfo, BinaryTree* tree) {
 
   // size os docInfo
   int len = 0;
-  double docTimes[len];
-  double docComp[len];
   int maxHeight = 0;
   while (docInfo[len]) len++; // gets docInfo length
+  double docTimes[len];
+  double docComp[len];
+
   for (int i = 0; i < len; i++) {
       if (i % 1000 == 0 && i != 0) printf("Documents searched: %d\n", i);
 
@@ -117,6 +119,7 @@ void getSearchInfo(string** docInfo, BinaryTree* tree) {
           compCount = compCount + result.numComparisons;
 
       }
+
       docTimes[i] = totalSTime - (i != 0 ? docTimes[i-1] : 0);
       docComp[i] = compCount - (i != 0 ? docComp[i-1] : 0);
       fprintf(searchDocCSV, "%d,%lf,%lf,%d,%f,%d;",
@@ -132,6 +135,7 @@ void getSearchInfo(string** docInfo, BinaryTree* tree) {
         "%lf,%lf,%d,%lf,%d,%f;",
         totalSTime, meanSTime, count, totalTime, compCount, compCountMean
     );
+
   fclose(searchCSV);
   fclose(searchWordCSV);
   fclose(searchDocCSV);
@@ -171,7 +175,7 @@ int main(int argc, char *argv[]) {
       while(strcmp(word, "#stop") != 0) {
         printf("Write the word to be searched (#stop to stop execution): ");
         scanf("%s", word);
-        printf("%s\n", word);
+        //printf("%s\n", word);
         printf("\n");
         if (strcmp(word, "#stop") != 0) {
           struct SearchResult result = searchBST(tree, word);

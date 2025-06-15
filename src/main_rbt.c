@@ -93,10 +93,11 @@ void getSearchInfo(string** docInfo, BinaryTree* tree) {
 
   // size os docInfo
   int len = 0;
-  double docTimes[len];
-  double docComp[len];
+
   int maxHeight = 0;
   while (docInfo[len]) len++; // gets docInfo length
+  double docTimes[len];
+  double docComp[len];
   for (int i = 0; i < len; i++) {
       if (i % 1000 == 0 && i != 0) printf("Documents searched: %d\n", i);
 
