@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<title>README.html</title>
+<meta http-equiv="Content-Type" content="application/xhtml+xml;charset=utf-8"/>
+<link rel="stylesheet" type="text/css" media="all" href="https://cdn.jsdelivr.net/npm/github-markdown-css/github-markdown.min.css"  />
+<link rel="stylesheet" type="text/css" media="all" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/styles/github.min.css"  /><meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'><style> body { box-sizing: border-box; max-width: 740px; width: 100%; margin: 40px auto; padding: 0 10px; } </style><script id='MathJax-script' async src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'></script><script src='https://cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/highlight.min.js'></script><script>document.addEventListener('DOMContentLoaded', () => { document.body.classList.add('markdown-body'); document.querySelectorAll('pre[lang] > code').forEach((code) => { code.classList.add(code.parentElement.lang); }); document.querySelectorAll('pre > code').forEach((code) => { hljs.highlightBlock(code); }); });</script>
+</head>
+
+<body>
+
+marked(): highlight and langPrefix parameters are deprecated since version 5.0.0, should not be used and will be removed in the future. Instead use https://www.npmjs.com/package/marked-highlight.
+marked(): mangle parameter is deprecated since version 5.0.0, should not be used and will be removed in the future. Instead use https://www.npmjs.com/package/marked-mangle.
+marked(): headerIds and headerPrefix parameters are deprecated since version 5.0.0, should not be used and will be removed in the future. Instead use https://www.npmjs.com/package/marked-gfm-heading-id.
+<h1 id="ed-inv-index">ed-inv-index</h1>
+<p>Implementing inverted indexing with trees, for a college assignment.</p>
+<h2 id="how-to-use">How to use</h2>
+<p>Just run <code>make all</code> in the main directory of the repo. This will create two executables: </p>
+<ul>
+<li>main_bst: the main file for searching and seeking statistics on a inverse index implemented using binary search tree;</li>
+<li>test_bst: file with unitary tests for the binary search tree;</li>
+<li>main_avl: the same as main_bst, but using AVL tree to implement the inverted index;</li>
+<li>test_avl: file with unitary tests for the Adelson-Velsky and Landis tree;</li>
+<li>main_rbt: same as main_bst, but using the Red-Black Tree to implement the inverse index;</li>
+<li>test_rbt: file with tests for the BST.</li>
+</ul>
+<p>You can, then, run any of them as you please.</p>
+<h3 id="how-to-run-the-programs">How to run the programs</h3>
+<p>After compiling to <code>main_&lt;tree&gt;</code> or <code>test_&lt;tree&gt;</code>, you will probably want to use them. Below are the instructions to do so:</p>
+<ul>
+<li><p><code>main_&lt;tree&gt;</code>: For these, run <code>./main_&lt;tree&gt; &lt;mode&gt; &lt;num_docs&gt; &lt;path_docs&gt;</code>. The &lt;mode&gt; stands for <code>search</code>, if you want to build the tree and search for words (in an interactive and self-explanatory way), and <code>stats</code>, if you want to gather statistics about the program&#39;s performance. The statistics gathered are saved in .csv files, inside &lt;root&gt;/stats directory (where &lt;root&gt; is the main repository directory). &lt;num_docs&gt; is the number of documents that the user wants the program to read, and &lt;path_docs&gt; is the directory where the .txts are in, relatively to &lt;root&gt;. The .txts need to be named in the form of <code>doc_number.txt</code>, where doc_number starts from 0 and increse by steps of 1;</p>
+</li>
+<li><p><code>test_&lt;tree&gt;</code>: These are pretty straightforward. Just run it with <code>./test_&lt;tree&gt;</code> and the program will prompt the user to type <code>y</code> if they want to run the tests or <code>n</code> otherwise.</p>
+</li>
+</ul>
+<h2 id="if-you-want-to-use-the-bst-or-avl-in-c-code">If you want to use the BST or AVL in C++ code</h2>
+<p>For that purpose, take a look at the src directory after you have compiled the files with make.
+You&#39;ll see several .o&#39;s there, for each of the .c and .h files of the project. You&#39;ll need to compile them with you main C++ code in order to use the avl.c or bst.c content.
+Also, in your C++ code, you&#39;ll need to #include the <code>bst_wrapper.h</code> or <code>avl_wrapper.h</code> header file. It&#39;ll give you access to the functions defined in almost all .c files, and access to the namespace AVL/BST.
+That is, you&#39;ll have access to <code>BST::create</code>, <code>BST::insert</code>, <code>BST::search</code> and <code>BST::destroy</code>, functions for the BST creation and usage. Or, in the case of AVL or RBT, <code>AVL::create</code>, <code>AVL::insert</code>, <code>AVL::destroy</code>, <code>AVL::search</code> or <code>RBT::create</code>, <code>RBT::insert</code>, <code>RBT::destroy</code>, <code>RBT::search</code>.</p>
+<p>Then, just use the functions you want in your C++ code and remember to compile the .cpp along with all the .o&#39;s in src.</p>
+<p>If you find any problems, just create an issue.</p>
+
+
+</body>
+</html>
