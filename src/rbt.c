@@ -96,10 +96,30 @@ void secondHelper(Node* node) {
   }  
 }
 
+int updateHeight(Node *node, string word, Node *NIL) {
+   if (!node || node == NIL) return -1;
+   if (strcmp(word, node->word) < 0) {
+      int leftHeight = updateHeight(node->left, word, NIL);
+      int rightHeight = 0;
+      if (!node->right) rightHeight = -1;
+      else rightHeight = node->right->height;
+      node->height = leftHeight > rightHeight ? leftHeight + 1 : rightHeight + 1;
+      return node->height;
+   }
+   else if (strcmp(word, node->word) > 0) {
+      int rightHeight = updateHeight(node->right, word, NIL);
+      int leftHeight = 0;
+      if (!node->left) leftHeight = -1;
+      else leftHeight = node->left->height;
+      node->height = rightHeight > leftHeight ? rightHeight + 1 : leftHeight + 1;
+      return node->height;
+   }
+   else return node->height;
+}
 
 struct InsertResult insertRBT(BinaryTree* tree, string word, int docID) {
   if (!tree || !word || docID < 0) {
-    struct InsertResult result = {.executionTime = 0, .numComparisons = 0}; 
+    struct InsertResult result = {.executionTime = 0, .numComparisons = 0, .status = 0};
     return result;
   }
 
@@ -119,6 +139,7 @@ struct InsertResult insertRBT(BinaryTree* tree, string word, int docID) {
     newRoot->height = 0;
     tree->root = newRoot;
     result.numComparisons = 0;
+    result.status = 1;
   }
   else {
     Node* iterator = tree->root;
@@ -141,6 +162,7 @@ struct InsertResult insertRBT(BinaryTree* tree, string word, int docID) {
       clock_t totalTime = (double) (clock() - startTime)/CLOCKS_PER_SEC;
       result.executionTime = totalTime;
       result.numComparisons = numComp;
+      result.status = 2;
       return result; // will return if the duplicate word is found
     }
     // if not, will insert a new node
@@ -151,6 +173,7 @@ struct InsertResult insertRBT(BinaryTree* tree, string word, int docID) {
     newNode->right = tree->NIL;
     newNode->left = tree->NIL;
     newNode->isRed = 1;
+    newNode-> height = 0;
     insertValue(newNode->documentIds, &docID);
     if (strcmp(word, last->word) < 0) last->left = newNode;
     else last->right = newNode;
@@ -174,10 +197,13 @@ struct InsertResult insertRBT(BinaryTree* tree, string word, int docID) {
     }
     
     result.numComparisons = numComp;
+    updateHeight(tree->root, word, tree->NIL);
+
   }
   
   clock_t totalTime = (double) (clock() - startTime)/CLOCKS_PER_SEC;
   result.executionTime = totalTime;
+  result.status = 1;
   return result;
 }
 
