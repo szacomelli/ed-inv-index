@@ -9,6 +9,7 @@ BinaryTree* createAVL() {
         exit(1);
     }
     tree->root = NULL;
+    tree->NIL = NULL;
     return tree;
 }
 
