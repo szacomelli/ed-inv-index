@@ -85,7 +85,6 @@ void pTreeAux(Node* node, int* idxs, int col, int plus) {
     return;
 }
 
-
 int calculateHeight(Node* node, Node* NIL) {
     if (node == NIL) return 0;
     int left = (calculateHeight(node->left, NIL) + 1);
