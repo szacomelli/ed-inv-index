@@ -86,7 +86,6 @@ struct InsertResult insertBST(BinaryTree *tree, string word, int docId)
     Node* currNode = NULL;
     result.numComparisons = searchWord(tree->root, word, &currNode, &lasNode);
 
-
     if (currNode) // If currNode isn't NULL (i.e. if word was founded and the pointer changed)
     {
         insertValue(currNode->documentIds, &docId);
@@ -148,6 +147,19 @@ struct SearchResult searchBST(BinaryTree *tree, string word)
     clock_t end = clock();
     result.executionTime = ((double)(end - start)) / CLOCKS_PER_SEC;
     return result;
+}
+
+static void bstFreeRec(Node *root) {
+    if (root == NULL)
+        return;
+    bstFreeRec(root->left);
+    bstFreeRec(root->right);
+    freeList(root->documentIds);
+    root->documentIds = NULL;
+    free(root->word);
+    root->word = NULL;
+    free(root);
+    root = NULL;
 }
 
 void destroyBST(BinaryTree *tree)
