@@ -1,6 +1,6 @@
 #include "str.h"
 
-int strcmp(string strOne, string strTwo) {
+int strcmp(const string strOne, const string strTwo) {
     if (!strOne || !strTwo) {
         printf("Error in strcmp(): received a NULL param");
         exit(1);
@@ -27,7 +27,7 @@ int countChar(string txt, char wanted) {
     return count;
 }
 
-int strSize(string str) {
+int strSize(const string str) {
     if (!str) {
         printf("Error in strSize(): 'str' param is NULL");
         exit(1);
@@ -55,7 +55,7 @@ void strImplant(string src, string dst, int start, int end) {
         dst[idx + start] = '\0';
 }
 
-void strCopy(string src, string dst) {
+void strCopy(const string src, string dst) {
     if (!src) {
         printf("Error in strCopy(): 'src' pointer is NULL;\n");
         exit(1);
