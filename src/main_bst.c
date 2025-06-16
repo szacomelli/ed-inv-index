@@ -63,7 +63,7 @@ BinaryTree* buildTree(string** docInfo, string mode) {
     // writing in the docs
     if (strcmp(mode, "stats") == 0) fprintf( insertCSV,
         /* "Total insertion time: %lf\nMean insertion time: %lf\nNumber of words: %d\nTree build time:%lf\n", */
-        "%lf,%lf,%d,%Lf,%d,%f;",
+        "%lf,%lf,%d,%Lf,%d,%f\n",
         totalInsTime, meanInsTime, count, totalTime, compCount, compCountMean
     );
 
@@ -132,7 +132,7 @@ void getSearchInfo(string** docInfo, BinaryTree* tree) {
   clock_t totalTime = ((double)(end - start))/CLOCKS_PER_SEC;
   fprintf( searchCSV,
         /* "Total insertion time: %lf\nMean insertion time: %lf\nNumber of words: %d\nTree build time:%lf\n", */
-        "%lf,%lf,%d,%lf,%d,%f;",
+        "%lf,%lf,%d,%lf,%d,%f\n",
         totalSTime, meanSTime, count, totalTime, compCount, compCountMean
     );
 
