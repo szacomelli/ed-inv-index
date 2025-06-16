@@ -159,10 +159,9 @@ struct InsertResult insertRBT(BinaryTree* tree, string word, int docID) {
     }
     if (found) {
         if (lookupValue(iterator->documentIds, &docID) == -1) {
-        insertValue(iterator->documentIds, &docID);
-      }
+    insertValue(iterator->documentIds, &docID);
+    }
 
-      insertValue(iterator->documentIds, &docID);
       clock_t totalTime = (double) (clock() - startTime)/CLOCKS_PER_SEC;
       result.executionTime = totalTime;
       result.numComparisons = numComp;
