@@ -169,7 +169,16 @@ struct InsertResult insertAVL(BinaryTree* tree, const string word, int documentI
 
         if (cmp == 0) {
             // Word already exists, add documentId if new
-            if (lookupValue(current->documentIds, &documentId) == -1) {
+            int idFound = 0;
+            node* listIt = current->documentIds->tail;
+            while (listIt != NULL) {
+                if (*((int*) listIt->value) == documentId) {
+                    idFound = 1;
+                    break;
+                }
+                listIt = listIt->prev;
+            }
+            if (!idFound) {
                 insertValue(current->documentIds, &documentId);
             }
             result.status = 2;

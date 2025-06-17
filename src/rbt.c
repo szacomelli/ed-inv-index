@@ -158,9 +158,18 @@ struct InsertResult insertRBT(BinaryTree* tree, string word, int docID) {
       }
     }
     if (found) {
-        if (lookupValue(iterator->documentIds, &docID) == -1) {
-    insertValue(iterator->documentIds, &docID);
-    }
+      int idFound = 0;
+      node* listIt = iterator->documentIds->tail;
+      while (listIt != NULL) {
+        if (*((int*) listIt->value) == docID) {
+          idFound = 1;
+          break;
+        }
+        listIt = listIt->prev;
+      }
+      if (!idFound) {
+        insertValue(iterator->documentIds, &docID);
+      }
 
       double totalTime = (double) (clock() - startTime)/CLOCKS_PER_SEC;
       result.executionTime = totalTime;
