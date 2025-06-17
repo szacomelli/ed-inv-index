@@ -57,7 +57,7 @@ BinaryTree* buildTree(string** docInfo, string mode) {
     meanInsTime = ((float)totalInsTime)/count;
     compCountMean = compCount/count;
     clock_t end = clock();
-    clock_t totalTime = ((double)(end - start))/CLOCKS_PER_SEC;
+    double totalTime = ((double)(end - start))/CLOCKS_PER_SEC;
     printf("All %d documents were scanned\n", len);
 
     // writing in the docs
@@ -127,7 +127,7 @@ void getSearchInfo(string** docInfo, BinaryTree* tree) {
   meanSTime = ((float)totalSTime/count);
   compCountMean = (float)compCount/count;
   clock_t end = clock();
-  clock_t totalTime = ((double)(end - start))/CLOCKS_PER_SEC;
+  double totalTime = ((double)(end - start))/CLOCKS_PER_SEC;
   fprintf( searchCSV,
         /* "Total insertion time: %lf\nMean insertion time: %lf\nNumber of words: %d\nTree build time:%lf\n", */
         "%lf,%lf,%d,%lf,%d,%f;",

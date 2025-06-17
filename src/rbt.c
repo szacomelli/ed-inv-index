@@ -162,7 +162,7 @@ struct InsertResult insertRBT(BinaryTree* tree, string word, int docID) {
     insertValue(iterator->documentIds, &docID);
     }
 
-      clock_t totalTime = (double) (clock() - startTime)/CLOCKS_PER_SEC;
+      double totalTime = (double) (clock() - startTime)/CLOCKS_PER_SEC;
       result.executionTime = totalTime;
       result.numComparisons = numComp;
       result.status = 2;
@@ -204,7 +204,7 @@ struct InsertResult insertRBT(BinaryTree* tree, string word, int docID) {
 
   }
   
-  clock_t totalTime = (double) (clock() - startTime)/CLOCKS_PER_SEC;
+  double totalTime = (double) (clock() - startTime)/CLOCKS_PER_SEC;
   result.executionTime = totalTime;
   result.status = 1;
   return result;
