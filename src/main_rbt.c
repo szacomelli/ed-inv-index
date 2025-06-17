@@ -57,7 +57,7 @@ BinaryTree* buildTree(string** docInfo, string mode) {
     meanInsTime = ((float)totalInsTime)/count;
     compCountMean = compCount/count;
     clock_t end = clock();
-    clock_t totalTime = ((double)(end - start))/CLOCKS_PER_SEC;
+    double totalTime = ((double)(end - start))/CLOCKS_PER_SEC;
     printf("All %d documents were scanned\n", len);
 
     // writing in the docs
@@ -70,7 +70,7 @@ BinaryTree* buildTree(string** docInfo, string mode) {
     fclose(insertDocCSV);
     fclose(insertWordsCSV);
     //uncomment this if you have Graphviz installed, use a Linux system and want to see the tree's graph
-    saveTree(tree);
+    //saveTree(tree);
     // if you use Windows, the graph will not be automatically generated; instead, you will need to run
     // dot -Tsvg ./test.txt in the parent directory of src (in Windows, the command name may differ).
 
@@ -127,7 +127,7 @@ void getSearchInfo(string** docInfo, BinaryTree* tree) {
   meanSTime = ((float)totalSTime/count);
   compCountMean = (float)compCount/count;
   clock_t end = clock();
-  clock_t totalTime = ((double)(end - start))/CLOCKS_PER_SEC;
+  double totalTime = ((double)(end - start))/CLOCKS_PER_SEC;
   fprintf( searchCSV,
         /* "Total insertion time: %lf\nMean insertion time: %lf\nNumber of words: %d\nTree build time:%lf\n", */
         "%lf,%lf,%d,%lf,%d,%f\n",

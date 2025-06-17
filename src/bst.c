@@ -97,7 +97,18 @@ struct InsertResult insertBST(BinaryTree *tree, string word, int docId)
     if (currNode) // If currNode isn't NULL (i.e. if word was founded and the pointer changed)
     {
         result.status = 2;
+    int idFound = 0;
+      node* listIt = currNode->documentIds->tail;
+      while (listIt != NULL) {
+        if (*((int*) listIt->value) == docId) {
+          idFound = 1;
+          break;
+        }
+        listIt = listIt->prev;
+      }
+      if (!idFound) {
         insertValue(currNode->documentIds, &docId);
+    }
     }
     else
     {
