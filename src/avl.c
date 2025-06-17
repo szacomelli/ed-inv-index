@@ -209,7 +209,6 @@ struct InsertResult insertAVL(BinaryTree* tree, const string word, int documentI
     Node* rebNode = newNode;
 
     while (rebNode != NULL) {
-        rebNode = rebalance(rebNode);
         if (rebNode->left == tree->root || rebNode->right == tree->root) tree->root = rebNode;
         rebNode = rebalance(rebNode);
         if (rebNode->left == tree->root || rebNode->right == tree->root) tree->root = rebNode;
