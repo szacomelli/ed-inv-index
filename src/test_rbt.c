@@ -22,7 +22,7 @@ int test_create(int* total) {
             errors++;
         } else printf("Ok;\n");
         printf("-Teste %2d: ", tests++);
-        if (tree->NIL->height != 0) {
+        if (tree->NIL->height != -1) {
             printf("Error in \"createTree()\": leaf height different from 0;\n");
             errors++;
         } else printf("Ok;\n");

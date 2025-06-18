@@ -7,10 +7,38 @@ BinaryTree* createRBT() {
     printf("Error creating BRT\n");
     return NULL;
   }
-  tree->NIL->height = 0;
+  tree->NIL->height = -1;
   tree->NIL->word = (string)malloc(4);
   strCopy("NIL", tree->NIL->word);
   return tree;  
+}
+
+int updateHeight(Node *node, string word, Node *NIL) {
+   if (!node || node == NIL) return -1;
+   if (strcmp(word, node->word) < 0) {
+      int leftHeight = updateHeight(node->left, word, NIL);
+      int rightHeight = 0;
+      if (!node->right) rightHeight = -1;
+      else rightHeight = node->right->height;
+      node->height = leftHeight > rightHeight ? leftHeight + 1 : rightHeight + 1;
+      return node->height;
+   }
+   else if (strcmp(word, node->word) > 0) {
+      int rightHeight = updateHeight(node->right, word, NIL);
+      int leftHeight = 0;
+      if (!node->left) leftHeight = -1;
+      else leftHeight = node->left->height;
+      node->height = rightHeight > leftHeight ? rightHeight + 1 : leftHeight + 1;
+      return node->height;
+   }
+   else {
+     int leftHeight = -1;
+     int rightHeight = -1;
+     if (node->right) rightHeight = node->right->height;
+     if (node->left) leftHeight = node->left->height;
+     node->height = rightHeight > leftHeight ? rightHeight + 1 : leftHeight + 1;
+     return node->height;
+   }
 }
 
 // for the cases where inserting node breaks the balance, we need to "rotate" branches
@@ -46,6 +74,7 @@ void rotate(Node* node, int isRight) {
     node->parent = rightChild;
     node->right = newRight;
     if (newRight) newRight->parent = node;
+    //updateHeight(newRight);
   }
   return;
 }
@@ -94,27 +123,6 @@ void secondHelper(Node* node) {
     rotate(node->parent, 1);
     thirdHelper(node->right);
   }  
-}
-
-int updateHeight(Node *node, string word, Node *NIL) {
-   if (!node || node == NIL) return -1;
-   if (strcmp(word, node->word) < 0) {
-      int leftHeight = updateHeight(node->left, word, NIL);
-      int rightHeight = 0;
-      if (!node->right) rightHeight = -1;
-      else rightHeight = node->right->height;
-      node->height = leftHeight > rightHeight ? leftHeight + 1 : rightHeight + 1;
-      return node->height;
-   }
-   else if (strcmp(word, node->word) > 0) {
-      int rightHeight = updateHeight(node->right, word, NIL);
-      int leftHeight = 0;
-      if (!node->left) leftHeight = -1;
-      else leftHeight = node->left->height;
-      node->height = rightHeight > leftHeight ? rightHeight + 1 : leftHeight + 1;
-      return node->height;
-   }
-   else return node->height;
 }
 
 struct InsertResult insertRBT(BinaryTree* tree, string word, int docID) {
@@ -190,7 +198,7 @@ struct InsertResult insertRBT(BinaryTree* tree, string word, int docID) {
     if (strcmp(word, last->word) < 0) last->left = newNode;
     else last->right = newNode;
     newNode->parent = last;
-    newNode->height = calculateHeight(tree->root, tree->NIL);
+    newNode->height = 0;
 
     // here, it rebalances the tree, accordingly with the current case
     if (last->isRed) {
@@ -199,11 +207,14 @@ struct InsertResult insertRBT(BinaryTree* tree, string word, int docID) {
       else if (nCase == 2) {
         if (newNode->parent->parent == tree->root) tree->root = newNode;
         secondHelper(newNode);
-      
+        if (newNode->left) updateHeight(tree->root, newNode->left->word, tree->NIL);
+        if (newNode->right) updateHeight(tree->root, newNode->right->word, tree->NIL);
       }
       else if (nCase == 3) { 
         if (newNode->parent->parent == tree->root) tree->root = newNode->parent;
         thirdHelper(newNode);
+        if (newNode->parent->right) updateHeight(tree->root, newNode->parent->right->word, tree->NIL);
+        if (newNode->parent->left) updateHeight(tree->root, newNode->parent->left->word, tree->NIL);
       }
       tree->root->isRed = 0;
     }
