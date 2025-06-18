@@ -80,7 +80,7 @@ struct InsertResult insertBST(BinaryTree *tree, string word, int docId)
     {
         Node *newNode = createNodeWithWord(word, docId);
         tree->root = newNode;
-        tree->root->height = 1;
+        tree->root->height = 0;
         newNode->parent = NULL;
         result.numComparisons = 0;
         clock_t end = clock();

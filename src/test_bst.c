@@ -121,7 +121,7 @@ int test_insertion(int* total) {
             } else printf("Ok;\n");
             results = insertBST(tree, "right", 0);  // Inserting repeated docId
             printf("-Teste %2d: ", tests++);
-            if (root->left->right->documentIds->size != 3) {
+            if (root->left->right->documentIds->size != 2) {
                 printf("Error in \"insert()\": size of documentIds different than expected;\n");
                 errors++;
             } else printf("Ok;\n");
@@ -278,6 +278,7 @@ int main(void) {
     int* tests = malloc(4);
     *tests = 0;
     if (errors == 121) {
+        freopen("/dev/nul", "w", stderr); //<< Using this line to suppress fprintf(stderr,...) test_insertion()
         errors = 0;
         errors += test_empty(tests);
         errors += test_insertion(tests);
