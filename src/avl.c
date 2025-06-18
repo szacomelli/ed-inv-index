@@ -30,14 +30,15 @@ Node* createNodeAVL(const string word, int documentId) {
     node->parent = NULL;
     node->left = NULL;
     node->right = NULL;
-    node->height = 1;
+    node->height = 0;
+    node->isRed = 0;
 
     return node;
 }
 
 // Get the height of a node (0 if node is NULL)
 int getHeight(Node* node) {
-    return (node == NULL) ? 0 : node->height;
+    return (node == NULL) ? -1 : node->height;
 }
 
 // Update the height of a node based on children heights
