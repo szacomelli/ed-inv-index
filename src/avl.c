@@ -153,7 +153,7 @@ struct InsertResult insertAVL(BinaryTree* tree, const string word, int documentI
             return result;
         }
         result.status = 1;
-        result.numComparisons = 1;
+        result.numComparisons = 0;
         result.executionTime = (double)(clock() - start) / CLOCKS_PER_SEC;
         return result;
     }
