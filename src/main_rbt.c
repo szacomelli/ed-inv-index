@@ -120,7 +120,7 @@ void getSearchInfo(string** docInfo, BinaryTree* tree) {
       }
       docTimes[i] = totalSTime - (i != 0 ? docTimes[i-1] : 0);
       docComp[i] = compCount - (i != 0 ? docComp[i-1] : 0);
-      fprintf(searchDocCSV, "%d,%lf,%lf,%d,%f,%d",
+      fprintf(searchDocCSV, "%d,%lf,%lf,%d,%f,%d\n",
                 i, docTimes[i], docTimes[i]/docLen, docComp[i],(float)docComp[i]/docLen, docLen);
 
   }
