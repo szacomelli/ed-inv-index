@@ -58,27 +58,34 @@ int prtIndexAux(Node* tnode, int idx) {
 
 }
 
-void pTreeAux(Node* node, int* idxs, int col, int plus) {
+void pTreeAux(Node* node, int* idxs, int col, int plus, int isRbt) {
     if (!node) return;
+    printf("\n");
     int tmp = 0;
     if (plus) idxs[col] = 1;
     for (tmp = 0; tmp < col; tmp++)
         printf("%lc ", *(idxs + tmp)? C1 : ' ');
     if (node->left && node->right) {
-        printf("%lc%lc%lc%lc %s [%d]", plus? C2 : C3, C4, C5, C4, node->word, node->documentIds->size);
+        if (isRbt)
+            printf("%lc%lc%lc%lc %s %s \x1b[30;47m [%d]", plus? C2 : C3, C4, C5, C4, node->isRed? "\x1b[30;41m" : "\x1b[37;40m", node->word, node->documentIds->size);
+        else
+            printf("%lc%lc%lc%lc %s [%d]", plus? C2 : C3, C4, C5, C4, node->word, node->documentIds->size);
         if (node->isRed) printf(", RED node");
-        printf("\n");
-        pTreeAux(node->left, idxs, col+1, 1);
-        pTreeAux(node->right, idxs, col+1, 0);
+        pTreeAux(node->left, idxs, col+1, 1, isRbt);
+        pTreeAux(node->right, idxs, col+1, 0, isRbt);
     } else if (node->left || node->right) {
-        printf("%lc%lc%lc%lc %s [%d]", plus? C2 : C3, C4, C5, C4, node->word, node->documentIds->size);
+        if (isRbt)
+            printf("%lc%lc%lc%lc %s %s \x1b[30;47m [%d]", plus? C2 : C3, C4, C5, C4, node->isRed? "\x1b[30;41m" : "\x1b[37;40m", node->word, node->documentIds->size);
+        else
+            printf("%lc%lc%lc%lc %s [%d]", plus? C2 : C3, C4, C5, C4, node->word, node->documentIds->size);
         if (node->isRed) printf(", RED node");
-        printf("\n");
-        pTreeAux((node->left)? node->left : node->right, idxs, col+1, 0);
+        pTreeAux((node->left)? node->left : node->right, idxs, col+1, 0, isRbt);
     } else {
-        printf("%lc%lc%lc%lc %s [%d]", plus? C2 : C3, C4, C4, C4, node->word, node->documentIds->size);
+        if (isRbt)
+            printf("%lc%lc%lc%lc %s %s \x1b[30;47m [%d]", plus? C2 : C3, C4, C4, C4, node->isRed? "\x1b[30;41m" : "\x1b[37;40m", node->word, node->documentIds->size);
+        else
+            printf("%lc%lc%lc%lc %s [%d]", plus? C2 : C3, C4, C4, C4, node->word, node->documentIds->size);
         if (node->isRed) printf(", RED node");
-        printf("\n");
     }
     if (idxs[col]) idxs[col] = 0;
     idxs[col] = 0;
@@ -102,8 +109,10 @@ void printTree(BinaryTree* tree) {
     // setlocale(LC_CTYPE, "");
     int *idxs = malloc(height*4);
     for(int tmp = 0; tmp < height; tmp++) *(idxs + tmp) = 0;
-
-    pTreeAux(tree->root, idxs, 0, 0);
+    int isRbt = (tree->NIL != NULL);
+    if (isRbt) printf("\x1b[30;42m\nATENCAO: ARVORE FODA ABAIXO\x1b[47m");
+    pTreeAux(tree->root, idxs, 0, 0, isRbt);
+    if (isRbt) printf("\x1b[39;42m\n\x1b[49m\n"); 
     free(idxs);
     return;
 }
