@@ -31,6 +31,7 @@ Node* createNodeAVL(const string word, int documentId) {
     node->left = NULL;
     node->right = NULL;
     node->height = 0;
+    node->isRed = 0;
 
     return node;
 }
