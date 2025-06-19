@@ -90,9 +90,11 @@ int getCase(Node* node) {
   else return 3;
 }
 
+void balanceHelper(BinaryTree* tree, Node* newNode);
+
 // helper function to resolve the first insertion case
-void firstHelper(Node* node, Node* NIL) {
-  if (node->parent == NIL || node->parent->parent == NIL) return; // ensures we're not dealing with root or invalid nodes
+void firstHelper(Node* node, Node* NIL, BinaryTree* tree) {
+  if (node->parent == NIL || (!node->parent->isRed || node->parent->parent == NIL)) return; // ensures we're not dealing with root or invalid nodes
   Node* grand = node->parent->parent;
   // sets colors
   node->parent->isRed = 0;
@@ -100,7 +102,10 @@ void firstHelper(Node* node, Node* NIL) {
   if (grand->right == node->parent) grand->left->isRed = 0;
   else if (grand->left == node->parent) grand->right->isRed = 0;
   // call recursive function to recolor above nodes
-  firstHelper(grand, NIL);
+
+  if (!grand->parent->isRed) return;
+  balanceHelper(tree, grand);
+
 }
 
 // helper for the third case (it's used by second)
@@ -123,6 +128,34 @@ void secondHelper(Node* node) {
     rotate(node->parent, 1);
     thirdHelper(node->right);
   }  
+}
+
+void balanceHelper(BinaryTree* tree, Node* newNode) {
+  if (newNode->parent == tree->root) {
+    tree->root->isRed = 0;
+    return;
+
+  }
+  if (tree->root == newNode) return;
+  int nCase = getCase(newNode);
+  if (nCase == 1) firstHelper(newNode, tree->NIL, tree);
+  else if (nCase == 2) {
+    if (newNode->parent->parent == tree->root) tree->root = newNode;
+    secondHelper(newNode);
+    if (newNode->left) updateHeight(tree->root, newNode->left->word, tree->NIL);
+    if (newNode->right) updateHeight(tree->root, newNode->right->word, tree->NIL);
+  }
+  else if (nCase == 3) {
+    if (newNode->parent->parent == tree->root) tree->root = newNode->parent;
+    thirdHelper(newNode);
+    if (newNode->parent->right) updateHeight(tree->root, newNode->parent->right->word, tree->NIL);
+    if (newNode->parent->left) updateHeight(tree->root, newNode->parent->left->word, tree->NIL);
+  }
+  if (tree->NIL->right || tree->NIL->left) {
+    tree->NIL->right = NULL;
+    tree->NIL->left = NULL;
+  }
+  tree->root->isRed = 0;
 }
 
 struct InsertResult insertRBT(BinaryTree* tree, string word, int docID) {
@@ -202,21 +235,7 @@ struct InsertResult insertRBT(BinaryTree* tree, string word, int docID) {
 
     // here, it rebalances the tree, accordingly with the current case
     if (last->isRed) {
-      int nCase = getCase(newNode);
-      if (nCase == 1) firstHelper(newNode, tree->NIL);
-      else if (nCase == 2) {
-        if (newNode->parent->parent == tree->root) tree->root = newNode;
-        secondHelper(newNode);
-        if (newNode->left) updateHeight(tree->root, newNode->left->word, tree->NIL);
-        if (newNode->right) updateHeight(tree->root, newNode->right->word, tree->NIL);
-      }
-      else if (nCase == 3) { 
-        if (newNode->parent->parent == tree->root) tree->root = newNode->parent;
-        thirdHelper(newNode);
-        if (newNode->parent->right) updateHeight(tree->root, newNode->parent->right->word, tree->NIL);
-        if (newNode->parent->left) updateHeight(tree->root, newNode->parent->left->word, tree->NIL);
-      }
-      tree->root->isRed = 0;
+      balanceHelper(tree, newNode);
     }
     
     result.numComparisons = numComp;

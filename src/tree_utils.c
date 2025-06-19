@@ -20,6 +20,8 @@
 
 #define max(a ,b) (((a)>(b)) ? (a) : (b))
 
+#define min(a ,b) (((a)<(b)) ? (a) : (b))
+
 Node* createNode() {
     Node* node = malloc(sizeof(Node));
     node->word = NULL;
@@ -67,7 +69,7 @@ void pTreeAux(Node* node, int* idxs, int col, int plus, int isRbt) {
         printf("%lc ", *(idxs + tmp)? C1 : ' ');
     if (node->left && node->right) {
         if (isRbt)
-            printf("%lc%lc%lc%lc %s %s \x1b[30;47m [%d]", plus? C2 : C3, C4, C5, C4, node->isRed? "\x1b[30;41m" : "\x1b[37;40m", node->word, node->documentIds->size);
+            printf("%lc%lc%lc%lc %s %s \x1b[39;49m [%d]", plus? C2 : C3, C4, C5, C4, node->isRed? "\x1b[30;41m" : "\x1b[37;40m", node->word, node->documentIds->size);
         else
             printf("%lc%lc%lc%lc %s [%d]", plus? C2 : C3, C4, C5, C4, node->word, node->documentIds->size);
         if (node->isRed) printf(", RED node");
@@ -75,14 +77,14 @@ void pTreeAux(Node* node, int* idxs, int col, int plus, int isRbt) {
         pTreeAux(node->right, idxs, col+1, 0, isRbt);
     } else if (node->left || node->right) {
         if (isRbt)
-            printf("%lc%lc%lc%lc %s %s \x1b[30;47m [%d]", plus? C2 : C3, C4, C5, C4, node->isRed? "\x1b[30;41m" : "\x1b[37;40m", node->word, node->documentIds->size);
+            printf("%lc%lc%lc%lc %s %s \x1b[39;49m [%d]", plus? C2 : C3, C4, C5, C4, node->isRed? "\x1b[30;41m" : "\x1b[37;40m", node->word, node->documentIds->size);
         else
             printf("%lc%lc%lc%lc %s [%d]", plus? C2 : C3, C4, C5, C4, node->word, node->documentIds->size);
         if (node->isRed) printf(", RED node");
         pTreeAux((node->left)? node->left : node->right, idxs, col+1, 0, isRbt);
     } else {
         if (isRbt)
-            printf("%lc%lc%lc%lc %s %s \x1b[30;47m [%d]", plus? C2 : C3, C4, C4, C4, node->isRed? "\x1b[30;41m" : "\x1b[37;40m", node->word, node->documentIds->size);
+            printf("%lc%lc%lc%lc %s %s \x1b[39;49m [%d]", plus? C2 : C3, C4, C4, C4, node->isRed? "\x1b[30;41m" : "\x1b[37;40m", node->word, node->documentIds->size);
         else
             printf("%lc%lc%lc%lc %s [%d]", plus? C2 : C3, C4, C4, C4, node->word, node->documentIds->size);
         if (node->isRed) printf(", RED node");
@@ -93,10 +95,17 @@ void pTreeAux(Node* node, int* idxs, int col, int plus, int isRbt) {
 }
 
 int calculateHeight(Node* node, Node* NIL) {
-    if (node == NIL) return 0;
+    if (node == NIL) return -1;
     int left = (calculateHeight(node->left, NIL) + 1);
     int right = (calculateHeight(node->right, NIL) + 1);
     return max(left, right);
+}
+
+int calculateMinPath(Node* node, Node* NIL) {
+    if (node == NIL) return -1;
+    int left = (calculateMinPath(node->left, NIL) + 1);
+    int right = (calculateMinPath(node->right, NIL) + 1);
+    return min(left, right);
 }
 
 void printTree(BinaryTree* tree) {
@@ -110,9 +119,8 @@ void printTree(BinaryTree* tree) {
     int *idxs = malloc(height*4);
     for(int tmp = 0; tmp < height; tmp++) *(idxs + tmp) = 0;
     int isRbt = (tree->NIL != NULL);
-    if (isRbt) printf("\x1b[30;42m\nATENCAO: ARVORE FODA ABAIXO\x1b[47m");
     pTreeAux(tree->root, idxs, 0, 0, isRbt);
-    if (isRbt) printf("\x1b[39;42m\n\x1b[49m\n"); 
+    printf("\n"); 
     free(idxs);
     return;
 }
