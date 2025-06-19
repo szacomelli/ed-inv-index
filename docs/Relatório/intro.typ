@@ -1,0 +1,2 @@
+= Introdução
+O projeto consiste em implementar, em C e sem orientação a objetos, um índice invertido — estrutura que associa cada termo à lista de documentos onde ele aparece — utilizando três tipos de árvores de busca: BST, AVL e Rubro‑Negra. Cada implementação explora aspectos de alocação dinâmica e manipulação de ponteiros, permitindo comparar diretamente o custo de inserções, rotações e buscas em diferentes estratégias de balanceamento.
