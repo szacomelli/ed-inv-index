@@ -1,6 +1,0 @@
-= Conclusão
-
-
-A análise comparativa das três estruturas de dados aplicadas ao mesmo conjunto de documentos revelou diferenças significativas de eficiência e comportamento em função do tamanho do _dataset_. A Árvore de Busca Binária apresenta implementação mais simples e desempenho aceitável em volumes reduzidos, mas torna‑se instável e vulnerável a desequilíbrios à medida que o número de elementos cresce - suas alturas podem ultrapassar 30, comprometendo buscas e inserções. 
-
-Em contraste, a Árvore AVL, apesar da complexidade adicional e do custo computacional imposto pelas rotações constantes, garante o menor crescimento em altura e o menor número total de comparações, justificando plenamente o esforço extra em cenários de grande porte. Já a Árvore Rubro‑Negra aparece como uma alternativa intermediária entre as anteriores, uma vez que preserva o balanceamento com menos restrições do que a AVL e, por isso, realiza inserções mais rápidas, mesmo permitindo alturas ligeiramente superiores.
