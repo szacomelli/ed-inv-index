@@ -28,3 +28,12 @@ That is, you'll have access to `BST::create`, `BST::insert`, `BST::search` and `
 Then, just use the functions you want in your C++ code and remember to compile the .cpp along with all the .o's in src.
 
 If you find any problems, just create an issue.
+
+## Paths
+
+Below you can see what some directories are for:
+- src: contains all the code;
+- docs: contains the report and analysis for the trees;
+- stats: contains the gathered statistics for the trees;
+- vis: contains all the used graphics and the code used to generate them;
+- graph (can be create at runtime): contains the output.svg of the last tree generated.
