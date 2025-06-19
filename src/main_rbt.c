@@ -62,8 +62,8 @@ BinaryTree* buildTree(string** docInfo, string mode) {
     // writing in the docs
     if (strcmp(mode, "stats") == 0) fprintf( insertCSV,
         /* "Total insertion time: %lf\nMean insertion time: %lf\nNumber of words: %d\nTree build time:%lf\n", */
-        "%lf,%lf,%d,%lf,%d,%f;",
-        totalInsTime, meanInsTime, count, totalTime, compCount, compCountMean
+        "%lf,%lf,%d,%lf,%d,%f,%d,%d;",
+        totalInsTime, meanInsTime, count, totalTime, compCount, compCountMean,tree->root->height, calculateMinPath(tree->root, tree->NIL)
     );
     fclose(insertCSV);
     fclose(insertDocCSV);

@@ -20,6 +20,8 @@
 
 #define max(a ,b) (((a)>(b)) ? (a) : (b))
 
+#define min(a ,b) (((a)<(b)) ? (a) : (b))
+
 Node* createNode() {
     Node* node = malloc(sizeof(Node));
     node->word = NULL;
@@ -93,10 +95,17 @@ void pTreeAux(Node* node, int* idxs, int col, int plus, int isRbt) {
 }
 
 int calculateHeight(Node* node, Node* NIL) {
-    if (node == NIL) return 0;
+    if (node == NIL) return -1;
     int left = (calculateHeight(node->left, NIL) + 1);
     int right = (calculateHeight(node->right, NIL) + 1);
     return max(left, right);
+}
+
+int calculateMinPath(Node* node, Node* NIL) {
+    if (node == NIL) return -1;
+    int left = (calculateMinPath(node->left, NIL) + 1);
+    int right = (calculateMinPath(node->right, NIL) + 1);
+    return min(left, right);
 }
 
 void printTree(BinaryTree* tree) {
