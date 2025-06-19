@@ -9,6 +9,7 @@ BinaryTree* createAVL() {
         exit(1);
     }
     tree->root = NULL;
+    tree->NIL = NULL;
     return tree;
 }
 
@@ -29,14 +30,15 @@ Node* createNodeAVL(const string word, int documentId) {
     node->parent = NULL;
     node->left = NULL;
     node->right = NULL;
-    node->height = 1;
+    node->height = 0;
+    node->isRed = 0;
 
     return node;
 }
 
 // Get the height of a node (0 if node is NULL)
 int getHeight(Node* node) {
-    return (node == NULL) ? 0 : node->height;
+    return (node == NULL) ? -1 : node->height;
 }
 
 // Update the height of a node based on children heights
@@ -151,7 +153,7 @@ struct InsertResult insertAVL(BinaryTree* tree, const string word, int documentI
             return result;
         }
         result.status = 1;
-        result.numComparisons = 1;
+        result.numComparisons = 0;
         result.executionTime = (double)(clock() - start) / CLOCKS_PER_SEC;
         return result;
     }
@@ -168,7 +170,16 @@ struct InsertResult insertAVL(BinaryTree* tree, const string word, int documentI
 
         if (cmp == 0) {
             // Word already exists, add documentId if new
-            if (lookupValue(current->documentIds, &documentId) == -1) {
+            int idFound = 0;
+            node* listIt = current->documentIds->tail;
+            while (listIt != NULL) {
+                if (*((int*) listIt->value) == documentId) {
+                    idFound = 1;
+                    break;
+                }
+                listIt = listIt->prev;
+            }
+            if (!idFound) {
                 insertValue(current->documentIds, &documentId);
             }
             result.status = 2;
@@ -199,7 +210,6 @@ struct InsertResult insertAVL(BinaryTree* tree, const string word, int documentI
     Node* rebNode = newNode;
 
     while (rebNode != NULL) {
-        rebNode = rebalance(rebNode);
         if (rebNode->left == tree->root || rebNode->right == tree->root) tree->root = rebNode;
         rebNode = rebalance(rebNode);
         if (rebNode->left == tree->root || rebNode->right == tree->root) tree->root = rebNode;

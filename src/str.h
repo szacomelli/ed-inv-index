@@ -7,7 +7,7 @@
 *  That is, 1 if `strOne > strTwo`, 0 if `strOne == strTwo`
 *  and 1 if neither.
 */
-int strcmp(string strOne, string strTwo);
+int strcmp(const string strOne, const string strTwo);
 
 /* @brief Count the occurrences of the char `wanted` 
 *  in the string `txt`
@@ -22,7 +22,7 @@ int countChar(string txt, char wanted);
 /* @brief Returns the lenght of the string occupied.
 *  It stops at the first `\0` character
 */
-int strSize(string str);
+int strSize(const string str);
 
 /* @brief Change the string the characters in `dst` from 
 * `start` to `end` indexes with the string in `src`. The
@@ -41,7 +41,7 @@ void strImplant(string src, string dst, int start, int end);
 /* Copy the content of string `src` in string `dst`. You
 *  must create the dst string with sufficient space
 */
-void strCopy(string src, string dst);
+void strCopy(const string src, string dst);
 
 /* Concatenates the strings `strOne` and `strTwo` in the 
 *  string `result`. If the `sep` is set to `\0`, there 

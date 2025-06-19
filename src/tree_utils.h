@@ -39,6 +39,10 @@ struct SearchResult {
     // <Possíveis outras variáveis>
 };
 
+int calculateHeight(Node* node, Node* NIL);
+
+int calculateMinPath(Node* node, Node* NIL);
+
 void printIndex(BinaryTree* tree);
 
 void saveTree(BinaryTree* tree);

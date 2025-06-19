@@ -1,4 +1,8 @@
-a.out
-main_avl.exe
-src/avl.o
-stats/inserts.csv
+main_*
+test_*
+data/*.txt
+src/*.o
+graph/*
+stats/*
+~*
+testes*
